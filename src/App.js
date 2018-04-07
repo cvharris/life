@@ -3,6 +3,8 @@ import './App.css'
 import { TodoList } from './components/TodoList'
 import { TodoForm } from './components/TodoForm'
 import { Todo } from './lib/Todo'
+import Button from 'material-ui/Button'
+import { Grid } from 'material-ui'
 
 class App extends Component {
   constructor(props) {
@@ -55,15 +57,23 @@ class App extends Component {
 
   render() {
     return (
-      <div className="todo-app">
-        <button onClick={this.addTodo}>Add Todo +</button>
-        <TodoList
-          todos={this.state.todos}
-          todoChecked={this.checkTodo}
-          todoSelected={this.selectTodo}
-        />
-        <TodoForm todo={this.state.currentTodo} updateTodo={this.updateTodo} />
-      </div>
+      <Grid container className="todo-app" spacing={16} justify="center">
+        <Grid item xs={6}>
+          <h1>Life</h1>
+          <Button variant="raised" color="primary" onClick={this.addTodo}>
+            Add Todo +
+          </Button>
+          <TodoForm
+            todo={this.state.currentTodo}
+            updateTodo={this.updateTodo}
+          />
+          <TodoList
+            todos={this.state.todos}
+            todoChecked={this.checkTodo}
+            todoSelected={this.selectTodo}
+          />
+        </Grid>
+      </Grid>
     )
   }
 }
