@@ -5,3 +5,9 @@
 .todo-form {
   margin: 2rem 0;
 }
+
+#add-todo-button {
+  position: absolute;
+  bottom: 2rem;
+  right: 2rem;
+}

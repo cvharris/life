@@ -4,7 +4,11 @@ import { TodoList } from './components/TodoList'
 import { TodoForm } from './components/TodoForm'
 import { Todo } from './lib/Todo'
 import Button from 'material-ui/Button'
-import { Grid } from 'material-ui'
+import Grid from 'material-ui/Grid'
+import AppBar from 'material-ui/AppBar'
+import Toolbar from 'material-ui/Toolbar'
+import Typography from 'material-ui/Typography'
+import AddIcon from 'material-ui-icons/Add'
 
 class App extends Component {
   constructor(props) {
@@ -57,21 +61,34 @@ class App extends Component {
 
   render() {
     return (
-      <Grid container className="todo-app" spacing={16} justify="center">
-        <Grid item xs={6}>
-          <h1>Life</h1>
-          <Button variant="raised" color="primary" onClick={this.addTodo}>
-            Add Todo +
-          </Button>
-          <TodoForm
-            todo={this.state.currentTodo}
-            updateTodo={this.updateTodo}
-          />
-          <TodoList
-            todos={this.state.todos}
-            todoChecked={this.checkTodo}
-            todoSelected={this.selectTodo}
-          />
+      <Grid container className="todo-app" spacing={16}>
+        <AppBar position="static" color="default">
+          <Toolbar>
+            <Typography variant="title" color="inherit">
+              Life
+            </Typography>
+          </Toolbar>
+        </AppBar>
+        <Grid container className="todo-app" spacing={16} justify="center">
+          <Grid item xs={6}>
+            <TodoForm
+              todo={this.state.currentTodo}
+              updateTodo={this.updateTodo}
+            />
+            <TodoList
+              todos={this.state.todos}
+              todoChecked={this.checkTodo}
+              todoSelected={this.selectTodo}
+            />
+            <Button
+              variant="fab"
+              id="add-todo-button"
+              color="primary"
+              onClick={this.addTodo}
+            >
+              <AddIcon />
+            </Button>
+          </Grid>
         </Grid>
       </Grid>
     )
