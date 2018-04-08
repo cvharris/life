@@ -11,3 +11,8 @@
   bottom: 2rem;
   right: 2rem;
 }
+
+.app-subtitle {
+  font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+  padding-left: 0.5rem;
+}

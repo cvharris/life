@@ -17,12 +17,14 @@ class App extends Component {
 
     this.state = {
       todos: [],
-      currentTodo: null
+      currentTodo: null,
+      modalOpen: false
     }
     this.checkTodo = this.checkTodo.bind(this)
     this.selectTodo = this.selectTodo.bind(this)
     this.updateTodo = this.updateTodo.bind(this)
     this.addTodo = this.addTodo.bind(this)
+    this.handleModalClose = this.handleModalClose.bind(this)
     this.persistStateToStorage = debounce(this.persistStateToStorage, 750)
   }
 
@@ -57,7 +59,8 @@ class App extends Component {
   selectTodo(selectedTodo) {
     this.saveState({
       ...this.state,
-      currentTodo: selectedTodo
+      currentTodo: selectedTodo,
+      modalOpen: true
     })
   }
 
@@ -79,7 +82,15 @@ class App extends Component {
 
     this.saveState({
       todos: [...this.state.todos, newTodo],
-      currentTodo: newTodo
+      currentTodo: newTodo,
+      modalOpen: true
+    })
+  }
+
+  handleModalClose() {
+    this.saveState({
+      ...this.state,
+      modalOpen: false
     })
   }
 
@@ -89,20 +100,24 @@ class App extends Component {
         <AppBar position="static" color="default">
           <Toolbar>
             <Typography variant="title" color="inherit">
-              Life
+              Life<small className="app-subtitle">
+                <em>"Oh my life!"</em>
+              </small>
             </Typography>
           </Toolbar>
         </AppBar>
-        <Grid container className="todo-app" spacing={16} justify="center">
+        <Grid container className="todo-app" spacing={16}>
           <Grid item xs={6}>
-            <TodoForm
-              todo={this.state.currentTodo}
-              updateTodo={this.updateTodo}
-            />
             <TodoList
               todos={this.state.todos}
               todoChecked={this.checkTodo}
               todoSelected={this.selectTodo}
+            />
+            <TodoForm
+              todo={this.state.currentTodo}
+              updateTodo={this.updateTodo}
+              handleModalClose={this.handleModalClose}
+              modalOpen={this.state.modalOpen}
             />
             <Button
               variant="fab"
