@@ -3,6 +3,7 @@ import './App.css'
 import { TodoList } from './components/TodoList'
 import { TodoForm } from './components/TodoForm'
 import { Todo } from './lib/Todo'
+import debounce from 'lodash/debounce'
 import Button from 'material-ui/Button'
 import Grid from 'material-ui/Grid'
 import AppBar from 'material-ui/AppBar'
@@ -22,6 +23,29 @@ class App extends Component {
     this.selectTodo = this.selectTodo.bind(this)
     this.updateTodo = this.updateTodo.bind(this)
     this.addTodo = this.addTodo.bind(this)
+    this.persistStateToStorage = debounce(this.persistStateToStorage, 750)
+  }
+
+  componentDidMount() {
+    this.hydrateStateFromStorage()
+  }
+
+  hydrateStateFromStorage() {
+    const storage = localStorage.getItem('lifeStorage')
+
+    if (storage) {
+      this.saveState(JSON.parse(storage))
+    }
+  }
+
+  persistStateToStorage(state) {
+    localStorage.setItem('lifeStorage', JSON.stringify(state))
+  }
+
+  saveState(state) {
+    this.setState(state)
+
+    this.persistStateToStorage(state)
   }
 
   checkTodo(checkedTodo) {
@@ -31,14 +55,14 @@ class App extends Component {
   }
 
   selectTodo(selectedTodo) {
-    this.setState({
+    this.saveState({
       ...this.state,
       currentTodo: selectedTodo
     })
   }
 
   updateTodo(updatedTodo) {
-    this.setState({
+    this.saveState({
       todos: this.state.todos.map(todo => {
         if (todo.id === updatedTodo) {
           return updatedTodo
@@ -53,7 +77,7 @@ class App extends Component {
   addTodo() {
     const newTodo = new Todo()
 
-    this.setState({
+    this.saveState({
       todos: [...this.state.todos, newTodo],
       currentTodo: newTodo
     })
