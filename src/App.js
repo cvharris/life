@@ -89,17 +89,27 @@ class App extends Component {
     const newTodo = new Todo()
 
     this.saveState({
-      ...this.state,
+      todos: [...this.state.todos, newTodo],
       currentTodo: newTodo,
       modalOpen: true
     })
   }
 
   handleModalClose() {
-    this.saveState({
-      ...this.state,
-      modalOpen: false
-    })
+    if (!this.state.currentTodo.description) {
+      this.saveState({
+        ...this.state,
+        todos: this.state.todos.filter(
+          todo => todo.id !== this.state.currentTodo.id
+        ),
+        modalOpen: false
+      })
+    } else {
+      this.saveState({
+        ...this.state,
+        modalOpen: false
+      })
+    }
   }
 
   render() {
@@ -127,6 +137,7 @@ class App extends Component {
               updateTodo={this.updateTodo}
               handleModalClose={this.handleModalClose}
               modalOpen={this.state.modalOpen}
+              addAnotherTodo={this.addTodo}
             />
             <Button
               variant="fab"

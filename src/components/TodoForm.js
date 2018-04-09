@@ -44,7 +44,7 @@ export class TodoForm extends Component {
   }
 
   render() {
-    const { todo, handleModalClose, modalOpen } = this.props
+    const { todo, handleModalClose, modalOpen, addAnotherTodo } = this.props
 
     if (!todo) {
       return <div className="todo-form">No todos yet</div>
@@ -63,15 +63,24 @@ export class TodoForm extends Component {
             placeholder="Have to do..."
             value={todo.description}
             onChange={this.updateText}
+            onKeyUp={e => {
+              if (e.key === 'Enter') {
+                if (!todo.description) {
+                  handleModalClose()
+                } else {
+                  addAnotherTodo()
+                }
+              }
+            }}
             margin="normal"
           />
         </DialogContent>
         <DialogActions>
           <Button onClick={handleModalClose} color="primary">
-            Cancel
+            Close
           </Button>
-          <Button onClick={handleModalClose} color="primary">
-            Submit
+          <Button onClick={handleModalClose} variant="raised" color="primary">
+            Add Another
           </Button>
         </DialogActions>
       </Dialog>
