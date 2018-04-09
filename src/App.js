@@ -25,6 +25,7 @@ class App extends Component {
     this.updateTodo = this.updateTodo.bind(this)
     this.addTodo = this.addTodo.bind(this)
     this.handleModalClose = this.handleModalClose.bind(this)
+    this.deleteTodo = this.deleteTodo.bind(this)
     this.persistStateToStorage = debounce(this.persistStateToStorage, 750)
   }
 
@@ -77,11 +78,18 @@ class App extends Component {
     })
   }
 
+  deleteTodo(deletedTodo) {
+    this.saveState({
+      ...this.state,
+      todos: this.state.todos.filter(todo => todo.id !== deletedTodo.id)
+    })
+  }
+
   addTodo() {
     const newTodo = new Todo()
 
     this.saveState({
-      todos: [...this.state.todos, newTodo],
+      ...this.state,
       currentTodo: newTodo,
       modalOpen: true
     })
@@ -112,6 +120,7 @@ class App extends Component {
               todos={this.state.todos}
               todoChecked={this.checkTodo}
               todoSelected={this.selectTodo}
+              todoDeleted={this.deleteTodo}
             />
             <TodoForm
               todo={this.state.currentTodo}

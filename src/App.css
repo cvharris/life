@@ -16,3 +16,16 @@
   font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
   padding-left: 0.5rem;
 }
+
+.is-completed .todo-description h3 {
+  text-decoration: line-through;
+  color: rgba(185, 185, 185, 0.6);
+}
+
+.todo-list-item .todo-delete {
+  display: none;
+}
+
+.todo-list-item:hover .todo-delete {
+  display: block;
+}
