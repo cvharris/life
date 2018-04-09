@@ -7,6 +7,7 @@ import List, {
 import Checkbox from 'material-ui/Checkbox'
 import IconButton from 'material-ui/IconButton'
 import DeleteIcon from 'material-ui-icons/Delete'
+import EditIcon from 'material-ui-icons/Edit'
 
 export const TodoList = ({ todos, todoChecked, todoSelected, todoDeleted }) => (
   <div className="todo-list">
@@ -26,12 +27,18 @@ export const TodoList = ({ todos, todoChecked, todoSelected, todoDeleted }) => (
             <ListItemText
               className="todo-description"
               primary={todo.description}
-              onClick={() => todoSelected(todo)}
             />
-            <ListItemSecondaryAction>
+            <ListItemSecondaryAction className="todo-actions">
+              <IconButton
+                className="todo-edit"
+                aria-label="Edit"
+                onClick={() => todoSelected(todo)}
+              >
+                <EditIcon />
+              </IconButton>
               <IconButton
                 className="todo-delete"
-                aria-label="Comments"
+                aria-label="Delete"
                 onClick={() => todoDeleted(todo)}
               >
                 <DeleteIcon />

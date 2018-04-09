@@ -22,10 +22,10 @@
   color: rgba(185, 185, 185, 0.6);
 }
 
-.todo-list-item .todo-delete {
+.todo-list-item .todo-actions {
   display: none;
 }
 
-.todo-list-item:hover .todo-delete {
+.todo-list-item:hover .todo-actions {
   display: block;
 }
