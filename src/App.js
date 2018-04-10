@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import './App.css'
-import { TodoList } from './components/TodoList'
+import TodoList from './components/TodoList'
 import { TodoForm } from './components/TodoForm'
 import { Todo } from './lib/Todo'
 import debounce from 'lodash/debounce'
@@ -10,6 +10,7 @@ import AppBar from 'material-ui/AppBar'
 import Toolbar from 'material-ui/Toolbar'
 import Typography from 'material-ui/Typography'
 import AddIcon from 'material-ui-icons/Add'
+import { moveUp, moveDown } from './lib/dragHelper'
 
 class App extends Component {
   constructor(props) {
@@ -21,11 +22,13 @@ class App extends Component {
       modalOpen: false
     }
     this.checkTodo = this.checkTodo.bind(this)
-    this.selectTodo = this.selectTodo.bind(this)
+    this.editTodo = this.editTodo.bind(this)
     this.updateTodo = this.updateTodo.bind(this)
     this.addTodo = this.addTodo.bind(this)
     this.handleModalClose = this.handleModalClose.bind(this)
     this.deleteTodo = this.deleteTodo.bind(this)
+    this.getTodo = this.getTodo.bind(this)
+    this.moveTodo = this.moveTodo.bind(this)
     this.persistStateToStorage = debounce(this.persistStateToStorage, 750)
   }
 
@@ -57,10 +60,10 @@ class App extends Component {
     this.updateTodo(checkedTodo)
   }
 
-  selectTodo(selectedTodo) {
+  editTodo(editedTodo) {
     this.saveState({
       ...this.state,
-      currentTodo: selectedTodo,
+      currentTodo: editedTodo,
       modalOpen: true
     })
   }
@@ -85,6 +88,26 @@ class App extends Component {
     })
   }
 
+  moveTodo(movedTodoId, newPosition) {
+    const { index } = this.getTodo(movedTodoId)
+    const newList =
+      newPosition > index
+        ? moveDown(this.state.todos, newPosition, index)
+        : moveUp(this.state.todos, newPosition, index)
+    this.saveState({
+      ...this.state,
+      todos: newList
+    })
+  }
+
+  getTodo(todoToGetId) {
+    const gottenTodo = this.state.todos.filter(todo => todo.id === todoToGetId)[0]
+    return {
+      id: gottenTodo.id,
+      index: this.state.todos.findIndex(todo => todo.id === todoToGetId)
+    }
+  }
+
   addTodo() {
     const newTodo = new Todo()
 
@@ -99,9 +122,7 @@ class App extends Component {
     if (!this.state.currentTodo.description) {
       this.saveState({
         ...this.state,
-        todos: this.state.todos.filter(
-          todo => todo.id !== this.state.currentTodo.id
-        ),
+        todos: this.state.todos.filter(todo => todo.id !== this.state.currentTodo.id),
         modalOpen: false
       })
     } else {
@@ -129,8 +150,10 @@ class App extends Component {
             <TodoList
               todos={this.state.todos}
               todoChecked={this.checkTodo}
-              todoSelected={this.selectTodo}
+              todoEdited={this.editTodo}
               todoDeleted={this.deleteTodo}
+              getTodo={this.getTodo}
+              moveTodo={this.moveTodo}
             />
             <TodoForm
               todo={this.state.currentTodo}
@@ -139,12 +162,7 @@ class App extends Component {
               modalOpen={this.state.modalOpen}
               addAnotherTodo={this.addTodo}
             />
-            <Button
-              variant="fab"
-              id="add-todo-button"
-              color="primary"
-              onClick={this.addTodo}
-            >
+            <Button variant="fab" id="add-todo-button" color="primary" onClick={this.addTodo}>
               <AddIcon />
             </Button>
           </Grid>

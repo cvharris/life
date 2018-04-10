@@ -1,52 +1,38 @@
-import React from 'react'
-import List, {
-  ListItem,
-  ListItemText,
-  ListItemSecondaryAction
-} from 'material-ui/List'
-import Checkbox from 'material-ui/Checkbox'
-import IconButton from 'material-ui/IconButton'
-import DeleteIcon from 'material-ui-icons/Delete'
-import EditIcon from 'material-ui-icons/Edit'
+import React, { Component } from 'react'
+import List from 'material-ui/List'
+import HTML5Backend from 'react-dnd-html5-backend'
+import { DragDropContext, DropTarget } from 'react-dnd'
+import TodoListItem from './TodoListItem'
 
-export const TodoList = ({ todos, todoChecked, todoSelected, todoDeleted }) => (
-  <div className="todo-list">
-    <List>
-      {todos.map(todo => (
-        <div
-          key={todo.id}
-          className={
-            todo.isComplete ? 'todo-list-item is-completed' : 'todo-list-item'
-          }
-        >
-          <ListItem>
-            <Checkbox
-              checked={todo.isComplete}
-              onChange={() => todoChecked(todo)}
+const listTarget = {
+  drop() {}
+}
+
+class TodoList extends Component {
+  render() {
+    const { todos, todoChecked, todoEdited, todoDeleted, connectDropTarget, getTodo, moveTodo } = this.props
+    return connectDropTarget(
+      <div className="todo-list">
+        <List dense={true}>
+          {todos.map(todo => (
+            <TodoListItem
+              key={todo.id}
+              todo={todo}
+              todoChecked={todoChecked}
+              todoEdited={todoEdited}
+              todoDeleted={todoDeleted}
+              getTodo={getTodo}
+              moveTodo={moveTodo}
             />
-            <ListItemText
-              className="todo-description"
-              primary={todo.description}
-            />
-            <ListItemSecondaryAction className="todo-actions">
-              <IconButton
-                className="todo-edit"
-                aria-label="Edit"
-                onClick={() => todoSelected(todo)}
-              >
-                <EditIcon />
-              </IconButton>
-              <IconButton
-                className="todo-delete"
-                aria-label="Delete"
-                onClick={() => todoDeleted(todo)}
-              >
-                <DeleteIcon />
-              </IconButton>
-            </ListItemSecondaryAction>
-          </ListItem>
-        </div>
-      ))}
-    </List>
-  </div>
+          ))}
+        </List>
+      </div>
+    )
+  }
+}
+
+export default DragDropContext(HTML5Backend)(
+  DropTarget('todo-list', listTarget, connect => ({
+    connectDropTarget: connect.dropTarget()
+  }))(TodoList)
 )
