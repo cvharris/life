@@ -10,13 +10,21 @@ const listTarget = {
 
 class TodoList extends Component {
   render() {
-    const { todos, todoChecked, todoEdited, todoDeleted, connectDropTarget, getTodo, moveTodo } = this.props
+    const {
+      todos,
+      todoChecked,
+      todoEdited,
+      todoDeleted,
+      connectDropTarget,
+      getTodo,
+      moveTodo
+    } = this.props
     return connectDropTarget(
       <div className="todo-list">
         <List dense={true}>
-          {todos.map((todo, i) => (
+          {todos.map(todo => (
             <TodoListItem
-              key={i}
+              key={todo.id}
               todoId={todo.id}
               description={todo.description}
               isComplete={todo.isComplete}

@@ -1,6 +1,10 @@
 import React, { Component } from 'react'
 import flow from 'lodash/flow'
-import { ListItem, ListItemText, ListItemSecondaryAction } from 'material-ui/List'
+import {
+  ListItem,
+  ListItemText,
+  ListItemSecondaryAction
+} from 'material-ui/List'
 import Checkbox from 'material-ui/Checkbox'
 import IconButton from 'material-ui/IconButton'
 import DeleteIcon from 'material-ui-icons/Delete'
@@ -15,6 +19,7 @@ const todoListItemSource = {
     }
   },
   endDrag(props, monitor) {
+    // TODO: Implement this when the 'space' to drop is not the whole screen
     // const { id: droppedId, originalIndex } = monitor.getItem()
     // const didDrop = monitor.didDrop()
     // if (!didDrop) {
@@ -60,15 +65,28 @@ class TodoListItem extends Component {
     const opacity = isDragging ? 0 : 1
     return connectDragSource(
       connectDropTarget(
-        <div key={todoId} className={isComplete ? 'todo-list-item is-completed' : 'todo-list-item'}>
+        <div
+          key={todoId}
+          className={
+            isComplete ? 'todo-list-item is-completed' : 'todo-list-item'
+          }>
           <ListItem style={{ opacity }}>
-            <Checkbox checked={isComplete} onChange={() => todoChecked(todoId)} />
+            <Checkbox
+              checked={isComplete}
+              onChange={() => todoChecked(todoId)}
+            />
             <ListItemText className="todo-description" primary={description} />
             <ListItemSecondaryAction className="todo-actions">
-              <IconButton className="todo-edit" aria-label="Edit" onClick={() => todoEdited(todoId)}>
+              <IconButton
+                className="todo-edit"
+                aria-label="Edit"
+                onClick={() => todoEdited(todoId)}>
                 <EditIcon />
               </IconButton>
-              <IconButton className="todo-delete" aria-label="Delete" onClick={() => todoDeleted(todoId)}>
+              <IconButton
+                className="todo-delete"
+                aria-label="Delete"
+                onClick={() => todoDeleted(todoId)}>
                 <DeleteIcon />
               </IconButton>
             </ListItemSecondaryAction>

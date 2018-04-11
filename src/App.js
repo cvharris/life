@@ -58,7 +58,16 @@ class App extends Component {
     const checkedTodo = this.state.todos.find(todo => todo.id === checkedTodoId)
     checkedTodo.isComplete = !checkedTodo.isComplete
 
-    this.updateTodo(checkedTodo)
+    this.saveState({
+      ...this.state,
+      todos: this.state.todos.map(todo => {
+        if (todo.id === checkedTodoId) {
+          return checkedTodo
+        } else {
+          return todo
+        }
+      })
+    })
   }
 
   editTodo(editedTodoId) {
@@ -71,8 +80,9 @@ class App extends Component {
   }
 
   updateTodoDescription(updatedTodoId, updatedDescription) {
-    const todoToUpdate = this.state.todos.find(todo => todo.id === updatedTodo)
-    const updatedTodo = { ...todoToUpdate, description: updatedDescription }
+    const updatedTodo = this.state.todos.find(todo => todo.id === updatedTodoId)
+    updatedTodo.description = updatedDescription
+
     this.saveState({
       todos: this.state.todos.map(todo => {
         if (todo.id === updatedTodoId) {
@@ -96,6 +106,7 @@ class App extends Component {
   moveTodo(movedTodoId, newPosition) {
     const { index } = this.getTodo(movedTodoId)
     const newList = moveTodo(this.state.todos, newPosition, index)
+
     this.saveState({
       ...this.state,
       todos: newList
@@ -103,7 +114,9 @@ class App extends Component {
   }
 
   getTodo(todoToGetId) {
-    const gottenTodo = this.state.todos.filter(todo => todo.id === todoToGetId)[0]
+    const gottenTodo = this.state.todos.filter(
+      todo => todo.id === todoToGetId
+    )[0]
     return {
       id: gottenTodo.id,
       index: this.state.todos.findIndex(todo => todo.id === todoToGetId)
@@ -124,7 +137,9 @@ class App extends Component {
     if (!this.state.currentTodo.description) {
       this.saveState({
         ...this.state,
-        todos: this.state.todos.filter(todo => todo.id !== this.state.currentTodo.id),
+        todos: this.state.todos.filter(
+          todo => todo.id !== this.state.currentTodo.id
+        ),
         modalOpen: false
       })
     } else {
@@ -164,7 +179,11 @@ class App extends Component {
               modalOpen={this.state.modalOpen}
               addAnotherTodo={this.addTodo}
             />
-            <Button variant="fab" id="add-todo-button" color="primary" onClick={this.addTodo}>
+            <Button
+              variant="fab"
+              id="add-todo-button"
+              color="primary"
+              onClick={this.addTodo}>
               <AddIcon />
             </Button>
           </Grid>

@@ -1,7 +1,11 @@
 import React, { Component } from 'react'
 import TextField from 'material-ui/TextField'
 import Button from 'material-ui/Button'
-import Dialog, { DialogActions, DialogContent, DialogTitle } from 'material-ui/Dialog'
+import Dialog, {
+  DialogActions,
+  DialogContent,
+  DialogTitle
+} from 'material-ui/Dialog'
 
 export class TodoForm extends Component {
   constructor(props) {
@@ -36,7 +40,10 @@ export class TodoForm extends Component {
 
   updateText(evt) {
     this.props.todo.description = evt.target.value
-    this.props.updateTodoDescription(this.props.todo.id, this.props.todo.description)
+    this.props.updateTodoDescription(
+      this.props.todo.id,
+      this.props.todo.description
+    )
   }
 
   render() {
@@ -47,7 +54,10 @@ export class TodoForm extends Component {
     }
 
     return (
-      <Dialog aria-labelledby="add-todo-title" open={modalOpen} onClose={handleModalClose}>
+      <Dialog
+        aria-labelledby="add-todo-title"
+        open={modalOpen}
+        onClose={handleModalClose}>
         <DialogTitle id="add-todo-title">Add Todo</DialogTitle>
         <DialogContent>
           <TextField
