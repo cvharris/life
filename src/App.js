@@ -10,7 +10,7 @@ import AppBar from 'material-ui/AppBar'
 import Toolbar from 'material-ui/Toolbar'
 import Typography from 'material-ui/Typography'
 import AddIcon from 'material-ui-icons/Add'
-import { moveUp, moveDown } from './lib/dragHelper'
+import moveTodo from './lib/moveTodo'
 
 class App extends Component {
   constructor(props) {
@@ -90,10 +90,7 @@ class App extends Component {
 
   moveTodo(movedTodoId, newPosition) {
     const { index } = this.getTodo(movedTodoId)
-    const newList =
-      newPosition > index
-        ? moveDown(this.state.todos, newPosition, index)
-        : moveUp(this.state.todos, newPosition, index)
+    const newList = moveTodo(this.state.todos, newPosition, index)
     this.saveState({
       ...this.state,
       todos: newList
