@@ -14,10 +14,12 @@ class TodoList extends Component {
     return connectDropTarget(
       <div className="todo-list">
         <List dense={true}>
-          {todos.map(todo => (
+          {todos.map((todo, i) => (
             <TodoListItem
-              key={todo.id}
-              todo={todo}
+              key={i}
+              todoId={todo.id}
+              description={todo.description}
+              isComplete={todo.isComplete}
               todoChecked={todoChecked}
               todoEdited={todoEdited}
               todoDeleted={todoDeleted}

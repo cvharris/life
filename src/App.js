@@ -23,7 +23,7 @@ class App extends Component {
     }
     this.checkTodo = this.checkTodo.bind(this)
     this.editTodo = this.editTodo.bind(this)
-    this.updateTodo = this.updateTodo.bind(this)
+    this.updateTodoDescription = this.updateTodoDescription.bind(this)
     this.addTodo = this.addTodo.bind(this)
     this.handleModalClose = this.handleModalClose.bind(this)
     this.deleteTodo = this.deleteTodo.bind(this)
@@ -54,13 +54,15 @@ class App extends Component {
     this.persistStateToStorage(state)
   }
 
-  checkTodo(checkedTodo) {
+  checkTodo(checkedTodoId) {
+    const checkedTodo = this.state.todos.find(todo => todo.id === checkedTodoId)
     checkedTodo.isComplete = !checkedTodo.isComplete
 
     this.updateTodo(checkedTodo)
   }
 
-  editTodo(editedTodo) {
+  editTodo(editedTodoId) {
+    const editedTodo = this.state.todos.find(todo => todo.id === editedTodoId)
     this.saveState({
       ...this.state,
       currentTodo: editedTodo,
@@ -68,10 +70,12 @@ class App extends Component {
     })
   }
 
-  updateTodo(updatedTodo) {
+  updateTodoDescription(updatedTodoId, updatedDescription) {
+    const todoToUpdate = this.state.todos.find(todo => todo.id === updatedTodo)
+    const updatedTodo = { ...todoToUpdate, description: updatedDescription }
     this.saveState({
       todos: this.state.todos.map(todo => {
-        if (todo.id === updatedTodo) {
+        if (todo.id === updatedTodoId) {
           return updatedTodo
         } else {
           return todo
@@ -81,7 +85,8 @@ class App extends Component {
     })
   }
 
-  deleteTodo(deletedTodo) {
+  deleteTodo(deletedTodoId) {
+    const deletedTodo = this.state.todos.find(todo => todo.id === deletedTodoId)
     this.saveState({
       ...this.state,
       todos: this.state.todos.filter(todo => todo.id !== deletedTodo.id)
@@ -154,7 +159,7 @@ class App extends Component {
             />
             <TodoForm
               todo={this.state.currentTodo}
-              updateTodo={this.updateTodo}
+              updateTodoDescription={this.updateTodoDescription}
               handleModalClose={this.handleModalClose}
               modalOpen={this.state.modalOpen}
               addAnotherTodo={this.addTodo}

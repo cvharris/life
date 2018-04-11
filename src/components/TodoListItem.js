@@ -10,8 +10,8 @@ import { DropTarget, DragSource } from 'react-dnd'
 const todoListItemSource = {
   beginDrag(props) {
     return {
-      id: props.todo.id,
-      originalIndex: props.getTodo(props.todo.id).index
+      id: props.todoId,
+      originalIndex: props.getTodo(props.todoId).index
     }
   },
   endDrag(props, monitor) {
@@ -30,10 +30,10 @@ const todoTarget = {
 
   hover(props, monitor) {
     const { id: draggedId } = monitor.getItem()
-    const { todo } = props
+    const { todoId } = props
 
-    if (draggedId !== todo.id) {
-      const { index: overIndex } = props.getTodo(todo.id)
+    if (draggedId !== todoId) {
+      const { index: overIndex } = props.getTodo(todoId)
       props.moveTodo(draggedId, overIndex)
     }
   }
@@ -46,19 +46,29 @@ class TodoListItem extends Component {
   }
 
   render() {
-    const { todo, todoChecked, todoEdited, todoDeleted, isDragging, connectDragSource, connectDropTarget } = this.props
+    const {
+      todoId,
+      description,
+      isComplete,
+      todoChecked,
+      todoEdited,
+      todoDeleted,
+      isDragging,
+      connectDragSource,
+      connectDropTarget
+    } = this.props
     const opacity = isDragging ? 0 : 1
     return connectDragSource(
       connectDropTarget(
-        <div key={todo.id} className={todo.isComplete ? 'todo-list-item is-completed' : 'todo-list-item'}>
+        <div key={todoId} className={isComplete ? 'todo-list-item is-completed' : 'todo-list-item'}>
           <ListItem style={{ opacity }}>
-            <Checkbox checked={todo.isComplete} onChange={() => todoChecked(todo)} />
-            <ListItemText className="todo-description" primary={todo.description} />
+            <Checkbox checked={isComplete} onChange={() => todoChecked(todoId)} />
+            <ListItemText className="todo-description" primary={description} />
             <ListItemSecondaryAction className="todo-actions">
-              <IconButton className="todo-edit" aria-label="Edit" onClick={() => todoEdited(todo)}>
+              <IconButton className="todo-edit" aria-label="Edit" onClick={() => todoEdited(todoId)}>
                 <EditIcon />
               </IconButton>
-              <IconButton className="todo-delete" aria-label="Delete" onClick={() => todoDeleted(todo)}>
+              <IconButton className="todo-delete" aria-label="Delete" onClick={() => todoDeleted(todoId)}>
                 <DeleteIcon />
               </IconButton>
             </ListItemSecondaryAction>

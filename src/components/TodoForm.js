@@ -36,7 +36,7 @@ export class TodoForm extends Component {
 
   updateText(evt) {
     this.props.todo.description = evt.target.value
-    this.props.updateTodo(this.props.todo)
+    this.props.updateTodoDescription(this.props.todo.id, this.props.todo.description)
   }
 
   render() {
