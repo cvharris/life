@@ -11,6 +11,7 @@ import AddIcon from 'material-ui-icons/Add'
 import TodoForm from '../components/TodoForm'
 import TodoListContainer from '../containers/TodoListContainer'
 import Sidebar from '../components/Sidebar'
+import { addTodo } from '../reducers/todoList.reducer'
 import { toggleFormOpen } from '../reducers/todoForm.reducer'
 
 const styles = theme => ({
@@ -45,6 +46,7 @@ class LifeContainer extends Component {
     const newTodo = new Todo()
 
     this.props.toggleFormOpen(newTodo, true)
+    this.props.addTodo(newTodo)
   }
 
   render() {
@@ -80,5 +82,5 @@ class LifeContainer extends Component {
 
 export default compose(
   withStyles(styles),
-  connect(state => ({}), { toggleFormOpen })
+  connect(state => ({}), { toggleFormOpen, addTodo })
 )(LifeContainer)

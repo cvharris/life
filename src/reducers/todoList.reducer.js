@@ -20,6 +20,7 @@ export const initialState = {
 export default (state = initialState, action) => {
   switch (action.type) {
     case ADD_TODO:
+      action.payload.position = state.todos.length
       return {
         ...state,
         todos: [...state.todos, todo(undefined, action)]
