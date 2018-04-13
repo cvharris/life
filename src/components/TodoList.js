@@ -30,6 +30,7 @@ class TodoList extends Component {
 
   render() {
     const { todoIds, connectDropTarget } = this.props
+
     return connectDropTarget(
       <div className="todo-list">
         <List dense={true}>

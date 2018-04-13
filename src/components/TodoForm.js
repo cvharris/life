@@ -7,9 +7,11 @@ import Dialog, {
   DialogTitle
 } from 'material-ui/Dialog'
 import { connect } from 'react-redux'
-import { addTodo } from '../reducers/todoList.reducer'
+import { addTodo, updateTodo } from '../reducers/todoList.reducer'
 import { closeModal } from '../reducers/todoForm.reducer'
-import Select from 'react-select'
+import { MenuItem } from 'material-ui/Menu'
+import Select from 'material-ui/Select'
+import { FormControl } from 'material-ui/Form'
 
 class TodoForm extends Component {
   constructor(props) {
@@ -43,11 +45,7 @@ class TodoForm extends Component {
   }
 
   updateText(evt) {
-    this.props.todo.description = evt.target.value
-    this.props.updateTodoDescription(
-      this.props.todo.id,
-      this.props.todo.description
-    )
+    this.props.updateTodo({ ...this.props.todo, description: evt.target.value })
   }
 
   handleTagUpdate(value) {
@@ -65,28 +63,36 @@ class TodoForm extends Component {
         onClose={closeModal}>
         <DialogTitle id="add-todo-title">Add Todo</DialogTitle>
         <DialogContent>
-          <TextField
-            inputRef={this.setDescriptionFieldRef}
-            placeholder="Have to do..."
-            value={todo.description}
-            onChange={this.updateText}
-            onKeyUp={e => {
-              if (e.key === 'Enter') {
-                if (!todo.description) {
-                  closeModal()
-                } else {
-                  addTodo()
+          <FormControl>
+            <TextField
+              inputRef={this.setDescriptionFieldRef}
+              placeholder="Have to do..."
+              value={todo.description}
+              onChange={this.updateText}
+              onKeyUp={e => {
+                if (e.key === 'Enter') {
+                  if (!todo.description) {
+                    closeModal()
+                  } else {
+                    addTodo()
+                  }
                 }
-              }
-            }}
-            margin="normal"
-          />
-          <Select.Creatable
-            multi={true}
-            options={categories}
-            onChange={v => this.handleTagUpdate(v)}
-            value={todo.categories}
-          />
+              }}
+              margin="normal"
+            />
+          </FormControl>
+          <FormControl>
+            <Select
+              multiple={true}
+              onChange={v => this.handleTagUpdate(v)}
+              value={todo.categories ? todo.categories : []}>
+              {categories.map((category, i) => (
+                <MenuItem key={i} value={category.label}>
+                  {category.label}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
         </DialogContent>
         <DialogActions>
           <Button onClick={closeModal} color="primary">
@@ -107,5 +113,5 @@ export default connect(
     formOpen: state.todoForm.formOpen,
     categories: state.categories
   }),
-  { closeModal, addTodo }
+  { closeModal, updateTodo, addTodo }
 )(TodoForm)

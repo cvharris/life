@@ -9,6 +9,7 @@ export default (state, action) => {
       if (state.id !== action.payload.id) {
         return state
       } else {
+        console.log(action.payload)
         return {
           ...Object.assign(state, action.payload),
           updatedOn: new Date().getTime()

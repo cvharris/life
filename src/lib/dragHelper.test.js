@@ -9,25 +9,11 @@ test('moving from middle up to near sibling middle', () => {
   expect(moveUp(list, end, begin)).toMatchObject([1, 2, 4, 3, 5])
 })
 
-test('moving from middle up to further away middle', () => {
-  const begin = 3
-  const end = 1
-
-  expect(moveUp(list, end, begin)).toMatchObject([1, 4, 2, 3, 5])
-})
-
 test('moving from middle down to near sibling middle', () => {
   const begin = 2
   const end = 3
 
   expect(moveDown(list, end, begin)).toMatchObject([1, 2, 4, 3, 5])
-})
-
-test('moving from middle down to further away middle', () => {
-  const begin = 1
-  const end = 3
-
-  expect(moveDown(list, end, begin)).toMatchObject([1, 3, 4, 2, 5])
 })
 
 test('moving from beginning to middle', () => {

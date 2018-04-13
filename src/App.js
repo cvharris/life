@@ -1,16 +1,11 @@
 import React, { Component } from 'react'
 import './App.css'
-import Todo from './lib/Todo'
-import Button from 'material-ui/Button'
-import AddIcon from 'material-ui-icons/Add'
-import TodoForm from './components/TodoForm'
 import { Provider } from 'react-redux'
 import { loadState } from './conf/localStorage'
 import configureStore from './conf/store'
-import TodoListContainer from './containers/TodoListContainer'
-import { toggleFormOpen } from './reducers/todoForm.reducer'
+import LifeContainer from './containers/LifeContainer'
 
-class App extends Component {
+export default class App extends Component {
   constructor(props) {
     super(props)
 
@@ -18,8 +13,6 @@ class App extends Component {
       isStoreLoading: true,
       state: null
     }
-
-    this.addTodo = this.addTodo.bind(this)
   }
 
   componentWillMount() {
@@ -30,12 +23,6 @@ class App extends Component {
     })
   }
 
-  addTodo() {
-    const newTodo = new Todo()
-
-    this.state.store.dispatch(toggleFormOpen(newTodo, true))
-  }
-
   render() {
     if (this.state.storeLoading) {
       return <h1>Loading...</h1>
@@ -43,20 +30,8 @@ class App extends Component {
 
     return (
       <Provider store={this.state.store}>
-        <div>
-          <TodoListContainer />
-          <TodoForm />
-          <Button
-            variant="fab"
-            id="add-todo-button"
-            color="primary"
-            onClick={this.addTodo}>
-            <AddIcon />
-          </Button>
-        </div>
+        <LifeContainer />
       </Provider>
     )
   }
 }
-
-export default App
