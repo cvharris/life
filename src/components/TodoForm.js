@@ -8,10 +8,11 @@ import Dialog, {
 } from 'material-ui/Dialog'
 import { connect } from 'react-redux'
 import { addTodo, updateTodo } from '../reducers/todoList.reducer'
-import { closeModal } from '../reducers/todoForm.reducer'
+import { closeModal, toggleFormOpen } from '../reducers/todoForm.reducer'
 import { MenuItem } from 'material-ui/Menu'
 import Select from 'material-ui/Select'
 import { FormControl } from 'material-ui/Form'
+import Todo from '../lib/Todo'
 
 class TodoForm extends Component {
   constructor(props) {
@@ -26,6 +27,8 @@ class TodoForm extends Component {
     }
     this.focusDescriptionField = this.focusDescriptionField.bind(this)
     this.updateText = this.updateText.bind(this)
+    this.addAnotherTodo = this.addAnotherTodo.bind(this)
+    this.handleCategoryUpdate = this.handleCategoryUpdate.bind(this)
   }
 
   componentDidUpdate() {
@@ -48,12 +51,22 @@ class TodoForm extends Component {
     this.props.updateTodo({ ...this.props.todo, description: evt.target.value })
   }
 
-  handleTagUpdate(value) {
-    console.log(value)
+  handleCategoryUpdate(evt) {
+    const value = evt.target.value
+    const mappedCategories = value.map(val =>
+      this.props.categories.find(cat => cat.label === val)
+    )
+    this.props.updateTodo({ ...this.props.todo, categories: mappedCategories })
+  }
+
+  addAnotherTodo() {
+    const newTodo = new Todo()
+    this.props.toggleFormOpen(newTodo, true)
+    this.props.addTodo(newTodo)
   }
 
   render() {
-    const { todo, formOpen, closeModal, addTodo } = this.props
+    const { todo, formOpen, closeModal } = this.props
     const categories = this.props.categories ? this.props.categories : []
 
     return (
@@ -74,7 +87,7 @@ class TodoForm extends Component {
                   if (!todo.description) {
                     closeModal()
                   } else {
-                    addTodo()
+                    this.addAnotherTodo()
                   }
                 }
               }}
@@ -84,7 +97,7 @@ class TodoForm extends Component {
           <FormControl>
             <Select
               multiple={true}
-              onChange={v => this.handleTagUpdate(v)}
+              onChange={this.handleCategoryUpdate}
               value={todo.categories ? todo.categories : []}>
               {categories.map((category, i) => (
                 <MenuItem key={i} value={category.label}>
@@ -113,5 +126,5 @@ export default connect(
     formOpen: state.todoForm.formOpen,
     categories: state.categories
   }),
-  { closeModal, updateTodo, addTodo }
+  { closeModal, updateTodo, addTodo, toggleFormOpen }
 )(TodoForm)

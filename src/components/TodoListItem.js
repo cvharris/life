@@ -5,6 +5,7 @@ import {
   ListItemText,
   ListItemSecondaryAction
 } from 'material-ui/List'
+import Chip from 'material-ui/Chip'
 import Checkbox from 'material-ui/Checkbox'
 import IconButton from 'material-ui/IconButton'
 import DeleteIcon from 'material-ui-icons/Delete'
@@ -13,6 +14,7 @@ import { connect } from 'react-redux'
 import { DropTarget, DragSource } from 'react-dnd'
 import { updateTodo, deleteTodo } from '../reducers/todoList.reducer'
 import { toggleFormOpen } from '../reducers/todoForm.reducer'
+import { removeCategoryFromTodo } from '../reducers/categories.reducer'
 
 const todoListItemSource = {
   beginDrag(props) {
@@ -49,6 +51,21 @@ const todoTarget = {
 }
 
 class TodoListItem extends Component {
+  constructor(props) {
+    super(props)
+
+    this.handleRemovingCategory = this.handleRemovingCategory.bind(this)
+  }
+
+  handleRemovingCategory(category) {
+    this.props.updateTodo({
+      ...this.props.todo,
+      categories: this.props.todo.categories.filter(
+        cat => cat.id !== category.id
+      )
+    })
+  }
+
   render() {
     const {
       todo,
@@ -59,13 +76,9 @@ class TodoListItem extends Component {
       connectDragSource,
       connectDropTarget
     } = this.props
-    const { description, categories, isComplete } = todo
+    const { description, isComplete } = todo
     const opacity = isDragging ? 0 : 1
-    const categoryString = categories
-      ? `<span class="category">${categories
-          .map(cat => cat.label)
-          .join(`</span><span class="category">`)}</span>`
-      : ``
+    const categories = todo.categories ? todo.categories : []
 
     return connectDragSource(
       connectDropTarget(
@@ -78,8 +91,19 @@ class TodoListItem extends Component {
             <Checkbox checked={isComplete} onChange={() => todoChecked(todo)} />
             <ListItemText
               className="todo-description"
-              primary={description}
-              secondary={categoryString}
+              disableTypography={true}
+              primary={
+                <h3 className="MuiTypography-root-42 MuiTypography-subheading-49 MuiListItemText-primary-106 MuiListItemText-textDense-108">
+                  {description}
+                </h3>
+              }
+              secondary={categories.map(category => (
+                <Chip
+                  key={category.id}
+                  label={category.label}
+                  onDelete={() => this.handleRemovingCategory(category)}
+                />
+              ))}
             />
             <ListItemSecondaryAction className="todo-actions">
               <IconButton
@@ -129,6 +153,9 @@ export default flow(
       },
       deleteTodo(todo) {
         dispatch(deleteTodo(todo))
+      },
+      removeCategory(todo, category) {
+        dispatch(removeCategoryFromTodo(todo, category))
       }
     })
   )

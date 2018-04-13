@@ -5,9 +5,9 @@ export const categorizeTodo = (todoId, category) => ({
   type: CATEGORIZE_TODO,
   payload: { todoId, category }
 })
-export const removeCategoryFromTodo = (todoId, category) => ({
+export const removeCategoryFromTodo = (todo, category) => ({
   type: REMOVE_TODO_CATEGORY,
-  payload: { todoId, category }
+  payload: { todo, category }
 })
 
 // Initial State
