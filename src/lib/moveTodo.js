@@ -1,6 +1,7 @@
 import { moveDown, moveFromBottom, moveFromFirst, moveUp } from './dragHelper'
 
 export default (todos, newPosition, firstIndex) => {
+  console.log(todos.length, firstIndex, newPosition)
   if (firstIndex === 0) {
     return moveFromFirst(todos, newPosition)
   } else if (firstIndex === todos.length - 1) {

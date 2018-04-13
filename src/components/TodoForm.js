@@ -6,8 +6,12 @@ import Dialog, {
   DialogContent,
   DialogTitle
 } from 'material-ui/Dialog'
+import { connect } from 'react-redux'
+import { addTodo } from '../reducers/todoList.reducer'
+import { closeModal } from '../reducers/todoForm.reducer'
+import Select from 'react-select'
 
-export class TodoForm extends Component {
+class TodoForm extends Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -46,18 +50,19 @@ export class TodoForm extends Component {
     )
   }
 
-  render() {
-    const { todo, handleModalClose, modalOpen, addAnotherTodo } = this.props
+  handleTagUpdate(value) {
+    console.log(value)
+  }
 
-    if (!todo) {
-      return <div className="todo-form">No todos yet</div>
-    }
+  render() {
+    const { todo, formOpen, closeModal, addTodo } = this.props
+    const categories = this.props.categories ? this.props.categories : []
 
     return (
       <Dialog
         aria-labelledby="add-todo-title"
-        open={modalOpen}
-        onClose={handleModalClose}>
+        open={formOpen}
+        onClose={closeModal}>
         <DialogTitle id="add-todo-title">Add Todo</DialogTitle>
         <DialogContent>
           <TextField
@@ -68,20 +73,26 @@ export class TodoForm extends Component {
             onKeyUp={e => {
               if (e.key === 'Enter') {
                 if (!todo.description) {
-                  handleModalClose()
+                  closeModal()
                 } else {
-                  addAnotherTodo()
+                  addTodo()
                 }
               }
             }}
             margin="normal"
           />
+          <Select.Creatable
+            multi={true}
+            options={categories}
+            onChange={v => this.handleTagUpdate(v)}
+            value={todo.categories}
+          />
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleModalClose} color="primary">
+          <Button onClick={closeModal} color="primary">
             Close
           </Button>
-          <Button onClick={handleModalClose} variant="raised" color="primary">
+          <Button onClick={closeModal} variant="raised" color="primary">
             Add Another
           </Button>
         </DialogActions>
@@ -89,3 +100,12 @@ export class TodoForm extends Component {
     )
   }
 }
+
+export default connect(
+  state => ({
+    todo: state.todoForm.todo,
+    formOpen: state.todoForm.formOpen,
+    categories: state.categories
+  }),
+  { closeModal, addTodo }
+)(TodoForm)

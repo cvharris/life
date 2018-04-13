@@ -1,30 +1,44 @@
 import { moveDown, moveFromBottom, moveFromFirst, moveUp } from './dragHelper'
 
-const list = [1, 2, 3, 4, 5, 6]
+const list = [1, 2, 3, 4, 5]
 
-test('moving from middle up to middle', () => {
-  const firstIndex = 3
-  const newPosition = 2
+test('moving from middle up to near sibling middle', () => {
+  const begin = 3
+  const end = 2
 
-  expect(moveUp(list, newPosition, firstIndex)).toMatchObject([1, 2, 4, 3, 5, 6])
+  expect(moveUp(list, end, begin)).toMatchObject([1, 2, 4, 3, 5])
 })
 
-test('moving from middle down to middle', () => {
-  const firstIndex = 2
-  const newPosition = 3
+test('moving from middle up to further away middle', () => {
+  const begin = 3
+  const end = 1
 
-  expect(moveDown(list, newPosition, firstIndex)).toMatchObject([1, 2, 4, 3, 5, 6])
+  expect(moveUp(list, end, begin)).toMatchObject([1, 4, 2, 3, 5])
+})
+
+test('moving from middle down to near sibling middle', () => {
+  const begin = 2
+  const end = 3
+
+  expect(moveDown(list, end, begin)).toMatchObject([1, 2, 4, 3, 5])
+})
+
+test('moving from middle down to further away middle', () => {
+  const begin = 1
+  const end = 3
+
+  expect(moveDown(list, end, begin)).toMatchObject([1, 3, 4, 2, 5])
 })
 
 test('moving from beginning to middle', () => {
-  const newPosition = 2
+  const end = 2
 
-  expect(moveFromFirst(list, newPosition)).toMatchObject([2, 3, 1, 4, 5, 6])
+  expect(moveFromFirst(list, end)).toMatchObject([2, 3, 1, 4, 5])
 })
 
 test('moving from bottom to middle', () => {
-  const firstIndex = 5
-  const newPosition = 2
+  const begin = 4
+  const end = 2
 
-  expect(moveFromBottom(list, newPosition, firstIndex)).toMatchObject([1, 2, 6, 3, 4, 5])
+  expect(moveFromBottom(list, end, begin)).toMatchObject([1, 2, 5, 3, 4])
 })
