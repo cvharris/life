@@ -1,10 +1,9 @@
 import v4 from 'uuid/v4'
 
-export default class Category {
+export default class Area {
   constructor(properties) {
     this.id = v4()
     this.label = ''
-    this.areas = []
     Object.assign(this, properties)
   }
 }

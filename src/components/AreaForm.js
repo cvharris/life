@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import TextField from 'material-ui/TextField'
-import Category from '../lib/Category'
 import Button from 'material-ui/Button'
 import Dialog, {
   DialogActions,
@@ -8,40 +7,41 @@ import Dialog, {
   DialogTitle
 } from 'material-ui/Dialog'
 import {
-  addCategory,
-  updateCategory,
-  deleteCategory
+  addAreaToCategory,
+  updateAreaInCategory,
+  deleteArea
 } from '../reducers/categories.reducer'
 import { connect } from 'react-redux'
+import Area from '../lib/Area'
 
 class CategoryForm extends Component {
   constructor(props) {
     super(props)
 
     this.state = {
-      dialogTitle: 'Add Category',
-      categoryLabel: ''
+      dialogTitle: 'Add Area',
+      areaLabel: ''
     }
 
     this.handleTyping = this.handleTyping.bind(this)
-    this.submitCategoryForm = this.submitCategoryForm.bind(this)
-    this.handleDeletingCategory = this.handleDeletingCategory.bind(this)
+    this.submitAreaForm = this.submitAreaForm.bind(this)
+    this.handleDeletingArea = this.handleDeletingArea.bind(this)
   }
 
   componentWillReceiveProps(nextProps) {
     if (
-      nextProps.categoryId !== this.props.categoryId &&
+      nextProps.areaId !== this.props.areaId &&
       nextProps.formOpen !== this.props.formOpen
     ) {
-      if (nextProps.categoryId && nextProps.category.label) {
+      if (nextProps.areaId && nextProps.area.label) {
         this.setState({
-          dialogTitle: `Edit ${nextProps.category.label}`,
-          categoryLabel: nextProps.category.label
+          dialogTitle: `Edit ${nextProps.area.label}`,
+          areaLabel: nextProps.area.label
         })
       } else {
         this.setState({
-          dialogTitle: 'Add Category',
-          categoryLabel: ''
+          dialogTitle: 'Add Area',
+          areaLabel: ''
         })
       }
     }
@@ -50,39 +50,40 @@ class CategoryForm extends Component {
   handleTyping(val) {
     this.setState({
       ...this.state,
-      categoryLabel: val
+      areaLabel: val
     })
   }
 
-  submitCategoryForm() {
+  submitAreaForm() {
     const {
-      category,
+      area,
+      areaId,
       toggleForm,
-      addCategory,
-      updateCategory,
+      addAreaToCategory,
+      updateAreaInCategory,
       categoryId
     } = this.props
 
-    if (!this.state.categoryLabel) {
+    if (!this.state.areaLabel) {
       toggleForm()
     } else {
-      const newCategory = { ...category, label: this.state.categoryLabel }
-      if (categoryId) {
-        updateCategory(newCategory)
+      const newArea = { ...area, label: this.state.areaLabel }
+      if (areaId) {
+        updateAreaInCategory(newArea, categoryId)
       } else {
-        addCategory(newCategory)
+        addAreaToCategory(newArea, categoryId)
       }
     }
     toggleForm()
   }
 
-  handleDeletingCategory() {
-    this.props.deleteCategory(this.props.category)
+  handleDeletingArea() {
+    this.props.deleteArea(this.props.area, this.props.categoryId)
     this.props.toggleForm()
   }
 
   render() {
-    const { formOpen, toggleForm, categoryId } = this.props
+    const { formOpen, toggleForm, areaId } = this.props
     return (
       <Dialog open={formOpen} onClose={() => toggleForm()}>
         <DialogTitle id="add-category-title">
@@ -90,21 +91,19 @@ class CategoryForm extends Component {
         </DialogTitle>
         <DialogContent>
           <TextField
-            placeholder="New category..."
+            placeholder="New area..."
             autoFocus={true}
-            value={this.state.categoryLabel}
+            value={this.state.areaLabel}
             onChange={e => this.handleTyping(e.target.value)}
-            onKeyUp={e =>
-              e.key === 'Enter' ? this.submitCategoryForm() : null
-            }
+            onKeyUp={e => (e.key === 'Enter' ? this.submitAreaForm() : null)}
           />
         </DialogContent>
         <DialogActions>
-          {categoryId && (
+          {areaId && (
             <Button
               aria-label="Delete"
               color="secondary"
-              onClick={this.handleDeletingCategory}>
+              onClick={this.handleDeletingArea}>
               Delete
             </Button>
           )}
@@ -112,7 +111,7 @@ class CategoryForm extends Component {
             Close
           </Button>
           <Button
-            onClick={this.submitCategoryForm}
+            onClick={this.submitAreaForm}
             variant="raised"
             color="primary">
             Submit
@@ -125,13 +124,16 @@ class CategoryForm extends Component {
 
 export default connect(
   (state, ownProps) => {
-    const currentCategory = ownProps.categoryId
-      ? state.categories.filter(cat => cat.id === ownProps.categoryId)[0]
-      : new Category()
+    const currentArea =
+      ownProps.categoryId && ownProps.areaId
+        ? state.categories
+            .filter(cat => cat.id === ownProps.categoryId)[0]
+            .areas.filter(area => area.id === ownProps.areaId)[0]
+        : new Area()
     return {
-      category: currentCategory,
+      area: currentArea,
       categories: state.categories
     }
   },
-  { addCategory, updateCategory, deleteCategory }
+  { addAreaToCategory, updateAreaInCategory, deleteArea }
 )(CategoryForm)

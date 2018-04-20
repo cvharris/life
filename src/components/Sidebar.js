@@ -10,8 +10,9 @@ import List, {
 } from 'material-ui/List'
 import AddCircleOutlineIcon from 'material-ui-icons/AddCircleOutline'
 import IconButton from 'material-ui/IconButton'
-import DeleteIcon from 'material-ui-icons/Delete'
 import EditIcon from 'material-ui-icons/Edit'
+import AreaForm from './AreaForm'
+import Collapse from 'material-ui/transitions/Collapse'
 import ListSubheader from 'material-ui/List/ListSubheader'
 import PlaylistAddCheckIcon from 'material-ui-icons/PlaylistAddCheck'
 import BookIcon from 'material-ui-icons/Book'
@@ -29,6 +30,9 @@ const styles = theme => ({
     position: 'relative',
     width: drawerWidth
   },
+  nested: {
+    paddingLeft: theme.spacing.unit * 2
+  },
   toolbar: theme.mixins.toolbar
 })
 
@@ -40,10 +44,12 @@ class Sidebar extends Component {
       currentCategoryId: null,
       categoryFormOpen: false,
       currentAreaId: null,
-      areaFormOpen: false
+      areaFormOpen: false,
+      areasOpen: true
     }
 
     this.toggleCategoryForm = this.toggleCategoryForm.bind(this)
+    this.toggleAreaForm = this.toggleAreaForm.bind(this)
   }
 
   toggleCategoryForm(categoryId) {
@@ -54,8 +60,17 @@ class Sidebar extends Component {
     })
   }
 
+  toggleAreaForm(areaId, categoryId) {
+    this.setState({
+      ...this.state,
+      currentCategoryId: categoryId || null,
+      currentAreaId: areaId || null,
+      areaFormOpen: !this.state.areaFormOpen
+    })
+  }
+
   render() {
-    const { classes, categories, deleteCategory } = this.props
+    const { classes, categories } = this.props
 
     return (
       <Drawer
@@ -92,6 +107,8 @@ class Sidebar extends Component {
         </List>
         <Divider />
         <List
+          dense={true}
+          disablePadding={true}
           subheader={
             <ListSubheader component="div">
               Areas
@@ -101,30 +118,50 @@ class Sidebar extends Component {
             </ListSubheader>
           }>
           {categories.map(category => (
-            <ListItem key={category.id}>
-              <ListItemText primary={category.label} />
-              <ListItemSecondaryAction className="todo-actions">
-                <IconButton
-                  className="todo-edit"
-                  aria-label="Edit"
-                  onClick={() => this.toggleCategoryForm(category.id)}>
-                  <EditIcon />
-                </IconButton>
-                <IconButton
-                  className="todo-delete"
-                  aria-label="Delete"
-                  onClick={() => deleteCategory(category)}>
-                  <DeleteIcon />
-                </IconButton>
-              </ListItemSecondaryAction>
-            </ListItem>
+            <div key={category.id}>
+              <ListItem dense={true}>
+                <EditIcon
+                  style={{ cursor: 'pointer' }}
+                  onClick={() => this.toggleCategoryForm(category.id)}
+                />
+                <ListItemText primary={category.label} />
+                <ListItemSecondaryAction className="todo-actions">
+                  <ListItemIcon
+                    onClick={() => this.toggleAreaForm(null, category.id)}>
+                    <AddCircleOutlineIcon />
+                  </ListItemIcon>
+                </ListItemSecondaryAction>
+                {/* <Collapse in={this.state.areasOpen} timeout="auto" unmounOnExit> */}
+                {/* </Collapse> */}
+              </ListItem>
+              <List
+                dense={true}
+                disablePadding={true}
+                component="div"
+                className={classes.nested}>
+                {category.areas.map(area => (
+                  <ListItem button key={area.id} dense={true}>
+                    <EditIcon
+                      style={{ cursor: 'pointer' }}
+                      onClick={() => this.toggleAreaForm(area.id, category.id)}
+                    />
+                    <ListItemText inset primary={area.label} />
+                  </ListItem>
+                ))}
+              </List>
+            </div>
           ))}
-          {/* TODO: Transform this to modal */}
         </List>
         <CategoryForm
           categoryId={this.state.currentCategoryId}
           formOpen={this.state.categoryFormOpen}
           toggleForm={this.toggleCategoryForm}
+        />
+        <AreaForm
+          areaId={this.state.currentAreaId}
+          categoryId={this.state.currentCategoryId}
+          formOpen={this.state.areaFormOpen}
+          toggleForm={this.toggleAreaForm}
         />
       </Drawer>
     )
