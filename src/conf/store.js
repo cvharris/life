@@ -5,6 +5,7 @@ import { saveState } from './localStorage'
 import todoList from '../reducers/todoList.reducer'
 import categories from '../reducers/categories.reducer'
 import todoForm from '../reducers/todoForm.reducer'
+import Todo from '../lib/Todo'
 
 const configureStore = persistedState => {
   const store = createStore(
@@ -19,7 +20,10 @@ const configureStore = persistedState => {
 
   store.subscribe(
     throttle(() => {
-      saveState(store.getState())
+      const state = store.getState()
+      // TODO: this is quick and easy data cleansing. Remove this later
+      state.todoList.todos = state.todoList.todos.map(todo => new Todo(todo))
+      saveState(state)
     }, 1000)
   )
 

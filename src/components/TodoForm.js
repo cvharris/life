@@ -11,7 +11,6 @@ import { addTodo, updateTodo } from '../reducers/todoList.reducer'
 import { closeModal, toggleFormOpen } from '../reducers/todoForm.reducer'
 import { MenuItem } from 'material-ui/Menu'
 import Select from 'material-ui/Select'
-import { FormControl } from 'material-ui/Form'
 import Todo from '../lib/Todo'
 
 class TodoForm extends Component {
@@ -76,42 +75,44 @@ class TodoForm extends Component {
         onClose={closeModal}>
         <DialogTitle id="add-todo-title">Add Todo</DialogTitle>
         <DialogContent>
-          <FormControl>
-            <TextField
-              inputRef={this.setDescriptionFieldRef}
-              placeholder="Have to do..."
-              value={todo.description}
-              onChange={this.updateText}
-              onKeyUp={e => {
-                if (e.key === 'Enter') {
-                  if (!todo.description) {
-                    closeModal()
-                  } else {
-                    this.addAnotherTodo()
-                  }
+          <TextField
+            inputRef={this.setDescriptionFieldRef}
+            placeholder="Have to do..."
+            value={todo.description}
+            fullWidth
+            onChange={this.updateText}
+            onKeyUp={e => {
+              if (e.key === 'Enter') {
+                if (!todo.description) {
+                  closeModal()
+                } else {
+                  this.addAnotherTodo()
                 }
-              }}
-              margin="normal"
-            />
-          </FormControl>
-          <FormControl>
-            <Select
-              multiple={true}
-              onChange={this.handleCategoryUpdate}
-              value={todo.categories ? todo.categories : []}>
-              {categories.map((category, i) => (
-                <MenuItem key={i} value={category.label}>
-                  {category.label}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
+              }
+            }}
+            margin="normal"
+          />
+          <Select
+            multiple={true}
+            onChange={this.handleCategoryUpdate}
+            value={
+              todo.categories ? todo.categories.map(cat => cat.label) : []
+            }>
+            {categories.map((category, i) => (
+              <MenuItem key={i} value={category.label}>
+                {category.label}
+              </MenuItem>
+            ))}
+          </Select>
         </DialogContent>
         <DialogActions>
           <Button onClick={closeModal} color="primary">
             Close
           </Button>
-          <Button onClick={closeModal} variant="raised" color="primary">
+          <Button
+            onClick={this.addAnotherTodo}
+            variant="raised"
+            color="primary">
             Add Another
           </Button>
         </DialogActions>

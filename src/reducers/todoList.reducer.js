@@ -1,4 +1,4 @@
-// import { CATEGORIZE_TODO, REMOVE_TODO_CATEGORY } from './categories.reducer'
+import { DELETE_CATEGORY } from './categories.reducer'
 import todo from './todo.reducer'
 
 export const ADD_TODO = 'ADD_TODO'
@@ -39,6 +39,11 @@ export default (state = initialState, action) => {
       return {
         ...state,
         todos: [...action.payload]
+      }
+    case DELETE_CATEGORY:
+      return {
+        ...state,
+        todos: state.todos.map(t => todo(t, action))
       }
     default:
       return state
