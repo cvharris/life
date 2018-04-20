@@ -8,8 +8,10 @@ import List, {
   ListItemText,
   ListItemSecondaryAction
 } from 'material-ui/List'
+import AddCircleOutlineIcon from 'material-ui-icons/AddCircleOutline'
 import IconButton from 'material-ui/IconButton'
 import DeleteIcon from 'material-ui-icons/Delete'
+import EditIcon from 'material-ui-icons/Edit'
 import ListSubheader from 'material-ui/List/ListSubheader'
 import PlaylistAddCheckIcon from 'material-ui-icons/PlaylistAddCheck'
 import BookIcon from 'material-ui-icons/Book'
@@ -31,6 +33,27 @@ const styles = theme => ({
 })
 
 class Sidebar extends Component {
+  constructor(props) {
+    super(props)
+
+    this.state = {
+      currentCategoryId: null,
+      categoryFormOpen: false,
+      currentAreaId: null,
+      areaFormOpen: false
+    }
+
+    this.toggleCategoryForm = this.toggleCategoryForm.bind(this)
+  }
+
+  toggleCategoryForm(categoryId) {
+    this.setState({
+      ...this.state,
+      currentCategoryId: categoryId || null,
+      categoryFormOpen: !this.state.categoryFormOpen
+    })
+  }
+
   render() {
     const { classes, categories, deleteCategory } = this.props
 
@@ -68,18 +91,25 @@ class Sidebar extends Component {
           </ListItem>
         </List>
         <Divider />
-        <List subheader={<ListSubheader component="div">Areas</ListSubheader>}>
+        <List
+          subheader={
+            <ListSubheader component="div">
+              Areas
+              <IconButton onClick={() => this.toggleCategoryForm()}>
+                <AddCircleOutlineIcon />
+              </IconButton>
+            </ListSubheader>
+          }>
           {categories.map(category => (
             <ListItem key={category.id}>
               <ListItemText primary={category.label} />
               <ListItemSecondaryAction className="todo-actions">
-                {/* TODO: add edit categories */}
-                {/* <IconButton
+                <IconButton
                   className="todo-edit"
                   aria-label="Edit"
-                  onClick={() => toggleFormOpen(todo)}>
+                  onClick={() => this.toggleCategoryForm(category.id)}>
                   <EditIcon />
-                </IconButton> */}
+                </IconButton>
                 <IconButton
                   className="todo-delete"
                   aria-label="Delete"
@@ -90,10 +120,12 @@ class Sidebar extends Component {
             </ListItem>
           ))}
           {/* TODO: Transform this to modal */}
-          <ListItem key="category-form">
-            <CategoryForm />
-          </ListItem>
         </List>
+        <CategoryForm
+          categoryId={this.state.currentCategoryId}
+          formOpen={this.state.categoryFormOpen}
+          toggleForm={this.toggleCategoryForm}
+        />
       </Drawer>
     )
   }
