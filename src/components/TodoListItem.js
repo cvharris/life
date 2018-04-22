@@ -67,6 +67,9 @@ class TodoListItem extends Component {
     if (this.props.todo.isComplete !== newProps.todo.isComplete) {
       return true
     }
+    if (this.props.todo.area !== newProps.todo.area) {
+      return true
+    }
     return false
   }
 
@@ -91,6 +94,7 @@ class TodoListItem extends Component {
       connectDropTarget
     } = this.props
     const { isComplete, description } = todo
+    const area = todo.area ? todo.area : { category: { label: '' }, label: '' }
     const opacity = isDragging ? 0 : 1
 
     return connectDragSource(
@@ -109,6 +113,11 @@ class TodoListItem extends Component {
                 <h3 className="MuiTypography-root-42 MuiTypography-subheading-49 MuiListItemText-primary-106 MuiListItemText-textDense-108">
                   {description}
                 </h3>
+              }
+              secondary={
+                <div>
+                  {area.category.label} - {area.label}
+                </div>
               }
             />
             <ListItemSecondaryAction className="todo-actions">

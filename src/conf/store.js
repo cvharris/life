@@ -22,7 +22,7 @@ const configureStore = persistedState => {
     throttle(() => {
       const state = store.getState()
       // TODO: this is quick and easy data cleansing. Remove this later
-      state.todoList.todos = state.todoList.todos.map(todo => new Todo(todo))
+      // state.todoList.todos = state.todoList.todos.map(todo => new Todo(todo))
       saveState(state)
     }, 1000)
   )

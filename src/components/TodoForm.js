@@ -12,6 +12,7 @@ import { closeModal, toggleFormOpen } from '../reducers/todoForm.reducer'
 import { MenuItem } from 'material-ui/Menu'
 import Select from 'material-ui/Select'
 import Todo from '../lib/Todo'
+import { getAreas } from '../selectors/area.selectors'
 
 class TodoForm extends Component {
   constructor(props) {
@@ -27,7 +28,7 @@ class TodoForm extends Component {
     this.focusDescriptionField = this.focusDescriptionField.bind(this)
     this.updateText = this.updateText.bind(this)
     this.addAnotherTodo = this.addAnotherTodo.bind(this)
-    this.handleCategoryUpdate = this.handleCategoryUpdate.bind(this)
+    this.handleAreaUpdate = this.handleAreaUpdate.bind(this)
   }
 
   componentDidUpdate() {
@@ -50,12 +51,20 @@ class TodoForm extends Component {
     this.props.updateTodo({ ...this.props.todo, description: evt.target.value })
   }
 
-  handleCategoryUpdate(evt) {
+  handleAreaUpdate(evt) {
     const value = evt.target.value
-    const mappedCategories = value.map(val =>
-      this.props.categories.find(cat => cat.label === val)
-    )
-    this.props.updateTodo({ ...this.props.todo, categories: mappedCategories })
+    let mappedArea
+    const category = this.props.categories.filter(cat => {
+      if (mappedArea) {
+        return false
+      }
+      mappedArea = cat.areas.find(area => area.label === value)
+      return !!mappedArea
+    })[0]
+    this.props.updateTodo({
+      ...this.props.todo,
+      area: { ...mappedArea, category }
+    })
   }
 
   addAnotherTodo() {
@@ -65,8 +74,7 @@ class TodoForm extends Component {
   }
 
   render() {
-    const { todo, formOpen, closeModal } = this.props
-    const categories = this.props.categories ? this.props.categories : []
+    const { todo, formOpen, closeModal, categories } = this.props
 
     return (
       <Dialog
@@ -93,15 +101,18 @@ class TodoForm extends Component {
             margin="normal"
           />
           <Select
-            multiple={true}
-            onChange={this.handleCategoryUpdate}
-            value={
-              todo.categories ? todo.categories.map(cat => cat.label) : []
-            }>
-            {categories.map((category, i) => (
-              <MenuItem key={i} value={category.label}>
-                {category.label}
-              </MenuItem>
+            native
+            onChange={this.handleAreaUpdate}
+            value={todo.area ? todo.area.label : ''}>
+            <option value="">-- Pick an Area --</option>
+            {categories.map(category => (
+              <optgroup key={category.id} label={category.label}>
+                {category.areas.map(area => (
+                  <option key={area.id} value={area.label}>
+                    {area.label}
+                  </option>
+                ))}
+              </optgroup>
             ))}
           </Select>
         </DialogContent>
