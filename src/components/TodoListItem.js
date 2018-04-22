@@ -12,26 +12,25 @@ import DeleteIcon from 'material-ui-icons/Delete'
 import EditIcon from 'material-ui-icons/Edit'
 import { connect } from 'react-redux'
 import { DropTarget, DragSource } from 'react-dnd'
-import { updateTodo, deleteTodo } from '../reducers/todoList.reducer'
+import { getTodoList } from '../selectors/todoList.selectors'
+import {
+  updateTodo,
+  deleteTodo,
+  moveTodos,
+  updateTodoPositions
+} from '../reducers/todoList.reducer'
 import { toggleFormOpen } from '../reducers/todoForm.reducer'
 import { removeCategoryFromTodo } from '../reducers/categories.reducer'
 
 const todoListItemSource = {
   beginDrag(props) {
     return {
-      todo: props.todo
+      id: props.todoId,
+      listIndex: props.listIndex
     }
   },
-  isDragging(props, monitor) {
-    return props.todo.id === monitor.getItem().todo.id
-  },
   endDrag(props, monitor) {
-    // TODO: Implement this when the 'space' to drop is not the whole screen
-    // const { id: droppedId, originalIndex } = monitor.getItem()
-    // const didDrop = monitor.didDrop()
-    // if (!didDrop) {
-    //   props.moveTodo(droppedId, originalIndex)
-    // }
+    props.updateTodoPositions()
   }
 }
 
@@ -41,12 +40,16 @@ const todoTarget = {
   },
 
   hover(props, monitor) {
-    const { todo: draggedTodo } = monitor.getItem()
-    const { todo } = props
+    const dragIndex = monitor.getItem().listIndex
+    const hoverIndex = props.listIndex
 
-    if (draggedTodo.id !== todo.id) {
-      props.moveTodo(draggedTodo, todo.position)
+    // Don't replace items with themselves
+    if (dragIndex === hoverIndex) {
+      return
     }
+
+    props.moveTodos(dragIndex, hoverIndex)
+    monitor.getItem().listIndex = hoverIndex
   }
 }
 
@@ -55,6 +58,16 @@ class TodoListItem extends Component {
     super(props)
 
     this.handleRemovingCategory = this.handleRemovingCategory.bind(this)
+  }
+
+  shouldComponentUpdate(newProps) {
+    if (this.props.todo.description !== newProps.todo.description) {
+      return true
+    }
+    if (this.props.todo.isComplete !== newProps.todo.isComplete) {
+      return true
+    }
+    return false
   }
 
   handleRemovingCategory(category) {
@@ -68,6 +81,7 @@ class TodoListItem extends Component {
 
   render() {
     const {
+      todoId,
       todo,
       toggleFormOpen,
       todoChecked,
@@ -76,14 +90,13 @@ class TodoListItem extends Component {
       connectDragSource,
       connectDropTarget
     } = this.props
-    const { description, isComplete } = todo
+    const { isComplete, description } = todo
     const opacity = isDragging ? 0 : 1
-    const categories = todo.categories ? todo.categories : []
 
     return connectDragSource(
       connectDropTarget(
         <div
-          key={todo.id}
+          key={todoId}
           className={
             isComplete ? 'todo-list-item is-completed' : 'todo-list-item'
           }>
@@ -97,13 +110,6 @@ class TodoListItem extends Component {
                   {description}
                 </h3>
               }
-              secondary={categories.map(category => (
-                <Chip
-                  key={category.id}
-                  label={category.label}
-                  onDelete={() => this.handleRemovingCategory(category)}
-                />
-              ))}
             />
             <ListItemSecondaryAction className="todo-actions">
               <IconButton
@@ -137,13 +143,14 @@ export default flow(
     }
   }),
   connect(
-    (state, props) => ({
-      todo: state.todoList.todos.find(t => t.id === props.todoId)
-    }),
+    (state, props) => {
+      return {
+        todo: getTodoList(state).find(t => t.id === props.todoId)
+      }
+    },
     dispatch => ({
       todoChecked(todo) {
-        todo.isComplete = !todo.isComplete
-        dispatch(updateTodo(todo))
+        dispatch(updateTodo({ ...todo, isComplete: !todo.isComplete }))
       },
       updateTodo(todo) {
         dispatch(updateTodo(todo))
@@ -151,11 +158,17 @@ export default flow(
       toggleFormOpen(todo) {
         dispatch(toggleFormOpen(todo, true))
       },
+      moveTodos(dragIndex, hoverIndex) {
+        dispatch(moveTodos(dragIndex, hoverIndex))
+      },
       deleteTodo(todo) {
         dispatch(deleteTodo(todo))
       },
       removeCategory(todo, category) {
         dispatch(removeCategoryFromTodo(todo, category))
+      },
+      updateTodoPositions() {
+        dispatch(updateTodoPositions())
       }
     })
   )
