@@ -30,3 +30,8 @@
 .todo-list-item:hover .todo-actions {
   display: block;
 }
+
+.nav-item.selected {
+  text-decoration: none;
+  background-color: rgba(0, 0, 0, 0.08);
+}

@@ -9,6 +9,10 @@ class TodoList extends Component {
   render() {
     const { todoIds } = this.props
 
+    if (todoIds.length === 0) {
+      return <h1 style={{ textAlign: 'center' }}>No todos yet! Go add some!</h1>
+    }
+
     return (
       <div className="todo-list">
         <List dense={true}>
@@ -24,7 +28,7 @@ class TodoList extends Component {
 export default DragDropContext(HTML5Backend)(
   connect(state => {
     return {
-      todoIds: state.todoList.todoIds
+      todoIds: state.todoList.filteredTodos.map(t => t.id)
     }
   })(TodoList)
 )

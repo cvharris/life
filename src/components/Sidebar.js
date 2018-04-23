@@ -12,7 +12,6 @@ import AddCircleOutlineIcon from 'material-ui-icons/AddCircleOutline'
 import IconButton from 'material-ui/IconButton'
 import EditIcon from 'material-ui-icons/Edit'
 import AreaForm from './AreaForm'
-import Collapse from 'material-ui/transitions/Collapse'
 import ListSubheader from 'material-ui/List/ListSubheader'
 import PlaylistAddCheckIcon from 'material-ui-icons/PlaylistAddCheck'
 import BookIcon from 'material-ui-icons/Book'
@@ -20,6 +19,7 @@ import ClearAllIcon from 'material-ui-icons/ClearAll'
 import TrendingUpIcon from 'material-ui-icons/TrendingUp'
 import CategoryForm from './CategoryForm'
 import { deleteCategory } from '../reducers/categories.reducer'
+import { filterTodos } from '../reducers/todoList.reducer'
 import { compose } from 'redux'
 import { connect } from 'react-redux'
 
@@ -41,6 +41,8 @@ class Sidebar extends Component {
     super(props)
 
     this.state = {
+      selectedCategoryId: null,
+      selectedAreaId: null,
       currentCategoryId: null,
       categoryFormOpen: false,
       currentAreaId: null,
@@ -69,8 +71,18 @@ class Sidebar extends Component {
     })
   }
 
+  selectedCategoryArea(categoryId, areaId) {
+    this.setState({
+      ...this.state,
+      selectedCategoryId: categoryId,
+      selectedAreaId: areaId
+    })
+    this.props.filterTodos(categoryId, areaId)
+  }
+
   render() {
     const { classes, categories } = this.props
+    const { selectedCategoryId, selectedAreaId } = this.state
 
     return (
       <Drawer
@@ -98,7 +110,14 @@ class Sidebar extends Component {
             </ListItemIcon>
             <ListItemText primary="Analytics" />
           </ListItem>
-          <ListItem button>
+          <ListItem
+            button
+            className={
+              !selectedCategoryId && !selectedAreaId
+                ? 'nav-item selected'
+                : 'nav-item'
+            }
+            onClick={() => this.selectedCategoryArea(null, null)}>
             <ListItemIcon>
               <PlaylistAddCheckIcon />
             </ListItemIcon>
@@ -111,7 +130,7 @@ class Sidebar extends Component {
           disablePadding={true}
           subheader={
             <ListSubheader component="div">
-              Areas
+              Categories & Areas
               <IconButton onClick={() => this.toggleCategoryForm()}>
                 <AddCircleOutlineIcon />
               </IconButton>
@@ -119,7 +138,15 @@ class Sidebar extends Component {
           }>
           {categories.map(category => (
             <div key={category.id}>
-              <ListItem dense={true}>
+              <ListItem
+                button
+                dense={true}
+                className={
+                  selectedCategoryId === category.id && !selectedAreaId
+                    ? 'nav-item selected'
+                    : 'nav-item'
+                }
+                onClick={() => this.selectedCategoryArea(category.id, null)}>
                 <EditIcon
                   style={{ cursor: 'pointer' }}
                   onClick={() => this.toggleCategoryForm(category.id)}
@@ -131,8 +158,6 @@ class Sidebar extends Component {
                     <AddCircleOutlineIcon />
                   </ListItemIcon>
                 </ListItemSecondaryAction>
-                {/* <Collapse in={this.state.areasOpen} timeout="auto" unmounOnExit> */}
-                {/* </Collapse> */}
               </ListItem>
               <List
                 dense={true}
@@ -140,7 +165,19 @@ class Sidebar extends Component {
                 component="div"
                 className={classes.nested}>
                 {category.areas.map(area => (
-                  <ListItem button key={area.id} dense={true}>
+                  <ListItem
+                    button
+                    key={area.id}
+                    dense={true}
+                    className={
+                      selectedCategoryId === category.id &&
+                      selectedAreaId === area.id
+                        ? 'nav-item selected'
+                        : 'nav-item'
+                    }
+                    onClick={() =>
+                      this.selectedCategoryArea(category.id, area.id)
+                    }>
                     <EditIcon
                       style={{ cursor: 'pointer' }}
                       onClick={() => this.toggleAreaForm(area.id, category.id)}
@@ -170,5 +207,8 @@ class Sidebar extends Component {
 
 export default compose(
   withStyles(styles),
-  connect(state => ({ categories: state.categories }), { deleteCategory })
+  connect(state => ({ categories: state.categories }), {
+    deleteCategory,
+    filterTodos
+  })
 )(Sidebar)
