@@ -121,15 +121,11 @@ class CategoryForm extends Component {
 
 export default connect(
   (state, ownProps) => {
-    const currentArea =
-      ownProps.categoryId && ownProps.areaId
-        ? state.categories
-            .filter(cat => cat.id === ownProps.categoryId)[0]
-            .areas.filter(area => area.id === ownProps.areaId)[0]
-        : new Area()
+    const currentArea = ownProps.areaId
+      ? state.areas[ownProps.areaId]
+      : new Area()
     return {
-      area: currentArea,
-      categories: state.categories
+      area: currentArea
     }
   },
   { addAreaToCategory, updateAreaInCategory, deleteArea }

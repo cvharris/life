@@ -78,6 +78,7 @@ export default (state = initialState, { type = '', payload }) => {
       return {
         ...state,
         byId: {
+          ...state.byId,
           [payload.categoryId]: {
             ...categoryToDeleteFrom,
             areas: categoryToDeleteFrom.areas.filter(

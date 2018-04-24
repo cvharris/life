@@ -19,7 +19,7 @@ describe('areas reducer', () => {
     const basicState = { '51': { id: '51', label: 'Derp', category: '3456' } }
     const newState = areas(basicState, {
       type: types.UPDATE_AREA,
-      payload: { id: '51', label: 'yarp' }
+      payload: { area: { id: '51', label: 'yarp' } }
     })
 
     expect(newState['51'].label).toBe('yarp')
@@ -29,7 +29,7 @@ describe('areas reducer', () => {
     const basicState = { '51': { id: '51', label: 'Derp', category: '3456' } }
     const newState = areas(basicState, {
       type: types.DELETE_AREA,
-      payload: { id: '51' }
+      payload: { area: { id: '51' } }
     })
 
     expect(newState).not.toHaveProperty('51')

@@ -41,7 +41,6 @@ const todoTarget = {
       return
     }
 
-    console.log('derp')
     props.moveTodos(dragId, hoverId)
   }, 100)
 }

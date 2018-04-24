@@ -126,11 +126,10 @@ class CategoryForm extends Component {
 export default connect(
   (state, ownProps) => {
     const currentCategory = ownProps.categoryId
-      ? state.categories.filter(cat => cat.id === ownProps.categoryId)[0]
+      ? state.categories.byId[ownProps.categoryId]
       : new Category()
     return {
-      category: currentCategory,
-      categories: state.categories
+      category: currentCategory
     }
   },
   { addCategory, updateCategory, deleteCategory }

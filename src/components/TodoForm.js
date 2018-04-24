@@ -57,6 +57,7 @@ class TodoForm extends Component {
   submitForm() {
     if (this.props.taskId) {
       this.props.updateTodo(this.state.task)
+      this.props.closeModal()
     } else {
       this.props.addTodo(this.state.task)
     }
@@ -66,9 +67,16 @@ class TodoForm extends Component {
   }
 
   render() {
-    const { formOpen, closeModal, areas, categories, categoryIds } = this.props
-
+    const {
+      taskId,
+      formOpen,
+      closeModal,
+      areas,
+      categories,
+      categoryIds
+    } = this.props
     const { task } = this.state
+    const submitText = taskId ? 'Save' : 'Save & Add Another'
 
     return (
       <Dialog
@@ -121,7 +129,7 @@ class TodoForm extends Component {
             Close
           </Button>
           <Button onClick={this.submitForm} variant="raised" color="primary">
-            Add Another
+            {submitText}
           </Button>
         </DialogActions>
       </Dialog>

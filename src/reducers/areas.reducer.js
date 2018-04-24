@@ -16,12 +16,15 @@ export default (state = initialState, { type = '', payload }) => {
     case ADD_AREA_TO_CATEGORY:
       return {
         ...state,
-        [payload.area.id]: { ...payload, category: payload.categoryId }
+        [payload.area.id]: { ...payload.area, category: payload.categoryId }
       }
     case UPDATE_AREA:
-      return { ...state, [payload.id]: { ...state[payload.id], ...payload } }
+      return {
+        ...state,
+        [payload.area.id]: { ...state[payload.area.id], ...payload.area }
+      }
     case DELETE_AREA:
-      const { [payload.id]: deletedArea, ...newState } = state
+      const { [payload.area.id]: deletedArea, ...newState } = state
       return newState
     default:
       return state

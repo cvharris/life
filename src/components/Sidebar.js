@@ -147,13 +147,16 @@ class Sidebar extends Component {
                     selectedCategoryId === categoryId && !selectedAreaId
                       ? 'nav-item selected'
                       : 'nav-item'
-                  }
-                  onClick={() => this.selectedCategoryArea(categoryId, null)}>
+                  }>
                   <EditIcon
                     style={{ cursor: 'pointer' }}
                     onClick={() => this.toggleCategoryForm(categoryId)}
                   />
-                  <ListItemText primary={category.label} />
+                  <ListItemText
+                    style={{ cursor: 'pointer' }}
+                    primary={category.label}
+                    onClick={() => this.selectedCategoryArea(categoryId, null)}
+                  />
                   <ListItemSecondaryAction className="todo-actions">
                     <ListItemIcon
                       onClick={() => this.toggleAreaForm(null, categoryId)}>
@@ -170,7 +173,6 @@ class Sidebar extends Component {
                     const area = areas[areaId]
                     return (
                       <ListItem
-                        button
                         key={areaId}
                         dense={true}
                         className={
@@ -178,17 +180,23 @@ class Sidebar extends Component {
                           selectedAreaId === areaId
                             ? 'nav-item selected'
                             : 'nav-item'
-                        }
-                        onClick={() =>
-                          this.selectedCategoryArea(categoryId, areaId)
                         }>
                         <EditIcon
-                          style={{ cursor: 'pointer' }}
+                          style={{
+                            cursor: 'pointer'
+                          }}
                           onClick={() =>
                             this.toggleAreaForm(areaId, categoryId)
                           }
                         />
-                        <ListItemText inset primary={area.label} />
+                        <ListItemText
+                          inset
+                          primary={area.label}
+                          style={{ cursor: 'pointer' }}
+                          onClick={() =>
+                            this.selectedCategoryArea(categoryId, areaId)
+                          }
+                        />
                       </ListItem>
                     )
                   })}
