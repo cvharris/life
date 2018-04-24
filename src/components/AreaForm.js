@@ -6,11 +6,8 @@ import Dialog, {
   DialogContent,
   DialogTitle
 } from 'material-ui/Dialog'
-import {
-  addAreaToCategory,
-  updateAreaInCategory,
-  deleteArea
-} from '../reducers/categories.reducer'
+import { addAreaToCategory, deleteArea } from '../reducers/categories.reducer'
+import { updateAreaInCategory } from '../reducers/areas.reducer'
 import { connect } from 'react-redux'
 import Area from '../lib/Area'
 

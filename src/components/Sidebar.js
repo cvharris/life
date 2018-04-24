@@ -19,7 +19,7 @@ import ClearAllIcon from 'material-ui-icons/ClearAll'
 import TrendingUpIcon from 'material-ui-icons/TrendingUp'
 import CategoryForm from './CategoryForm'
 import { deleteCategory } from '../reducers/categories.reducer'
-import { filterTodos } from '../reducers/todoList.reducer'
+// import { filterTodos } from '../reducers/todoList.reducer'
 import { compose } from 'redux'
 import { connect } from 'react-redux'
 
@@ -77,11 +77,11 @@ class Sidebar extends Component {
       selectedCategoryId: categoryId,
       selectedAreaId: areaId
     })
-    this.props.filterTodos(categoryId, areaId)
+    // this.props.filterTodos(categoryId, areaId)
   }
 
   render() {
-    const { classes, categories } = this.props
+    const { classes, areas, categories, categoryIds } = this.props
     const { selectedCategoryId, selectedAreaId } = this.state
 
     return (
@@ -136,58 +136,66 @@ class Sidebar extends Component {
               </IconButton>
             </ListSubheader>
           }>
-          {categories.map(category => (
-            <div key={category.id}>
-              <ListItem
-                button
-                dense={true}
-                className={
-                  selectedCategoryId === category.id && !selectedAreaId
-                    ? 'nav-item selected'
-                    : 'nav-item'
-                }
-                onClick={() => this.selectedCategoryArea(category.id, null)}>
-                <EditIcon
-                  style={{ cursor: 'pointer' }}
-                  onClick={() => this.toggleCategoryForm(category.id)}
-                />
-                <ListItemText primary={category.label} />
-                <ListItemSecondaryAction className="todo-actions">
-                  <ListItemIcon
-                    onClick={() => this.toggleAreaForm(null, category.id)}>
-                    <AddCircleOutlineIcon />
-                  </ListItemIcon>
-                </ListItemSecondaryAction>
-              </ListItem>
-              <List
-                dense={true}
-                disablePadding={true}
-                component="div"
-                className={classes.nested}>
-                {category.areas.map(area => (
-                  <ListItem
-                    button
-                    key={area.id}
-                    dense={true}
-                    className={
-                      selectedCategoryId === category.id &&
-                      selectedAreaId === area.id
-                        ? 'nav-item selected'
-                        : 'nav-item'
-                    }
-                    onClick={() =>
-                      this.selectedCategoryArea(category.id, area.id)
-                    }>
-                    <EditIcon
-                      style={{ cursor: 'pointer' }}
-                      onClick={() => this.toggleAreaForm(area.id, category.id)}
-                    />
-                    <ListItemText inset primary={area.label} />
-                  </ListItem>
-                ))}
-              </List>
-            </div>
-          ))}
+          {categoryIds.map(categoryId => {
+            const category = categories[categoryId]
+            return (
+              <div key={categoryId}>
+                <ListItem
+                  button
+                  dense={true}
+                  className={
+                    selectedCategoryId === categoryId && !selectedAreaId
+                      ? 'nav-item selected'
+                      : 'nav-item'
+                  }
+                  onClick={() => this.selectedCategoryArea(categoryId, null)}>
+                  <EditIcon
+                    style={{ cursor: 'pointer' }}
+                    onClick={() => this.toggleCategoryForm(categoryId)}
+                  />
+                  <ListItemText primary={category.label} />
+                  <ListItemSecondaryAction className="todo-actions">
+                    <ListItemIcon
+                      onClick={() => this.toggleAreaForm(null, categoryId)}>
+                      <AddCircleOutlineIcon />
+                    </ListItemIcon>
+                  </ListItemSecondaryAction>
+                </ListItem>
+                <List
+                  dense={true}
+                  disablePadding={true}
+                  component="div"
+                  className={classes.nested}>
+                  {category.areas.map(areaId => {
+                    const area = areas[areaId]
+                    return (
+                      <ListItem
+                        button
+                        key={areaId}
+                        dense={true}
+                        className={
+                          selectedCategoryId === categoryId &&
+                          selectedAreaId === areaId
+                            ? 'nav-item selected'
+                            : 'nav-item'
+                        }
+                        onClick={() =>
+                          this.selectedCategoryArea(categoryId, areaId)
+                        }>
+                        <EditIcon
+                          style={{ cursor: 'pointer' }}
+                          onClick={() =>
+                            this.toggleAreaForm(areaId, categoryId)
+                          }
+                        />
+                        <ListItemText inset primary={area.label} />
+                      </ListItem>
+                    )
+                  })}
+                </List>
+              </div>
+            )
+          })}
         </List>
         <CategoryForm
           categoryId={this.state.currentCategoryId}
@@ -207,8 +215,14 @@ class Sidebar extends Component {
 
 export default compose(
   withStyles(styles),
-  connect(state => ({ categories: state.categories }), {
-    deleteCategory,
-    filterTodos
-  })
+  connect(
+    state => ({
+      areas: state.areas,
+      categoryIds: state.categories.allIds,
+      categories: state.categories.byId
+    }),
+    {
+      deleteCategory
+    }
+  )
 )(Sidebar)

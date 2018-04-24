@@ -1,9 +1,12 @@
 import React, { Component } from 'react'
 import './App.css'
 import { Provider } from 'react-redux'
-import { loadState } from './conf/localStorage'
+// import { loadState } from './conf/localStorage'
 import configureStore from './conf/store'
 import LifeContainer from './containers/LifeContainer'
+import lifeSchema from './conf/schema'
+import data from './data'
+import { normalize } from 'normalizr'
 
 export default class App extends Component {
   constructor(props) {
@@ -16,9 +19,21 @@ export default class App extends Component {
   }
 
   componentWillMount() {
-    const persistedState = loadState()
+    // const persistedState = loadState()
+    const normalized = normalize(data, lifeSchema)
+    const mappedState = {
+      tasks: {
+        byId: normalized.entities.tasks,
+        allIds: normalized.result.tasks
+      },
+      categories: {
+        byId: normalized.entities.categories,
+        allIds: normalized.result.categories
+      },
+      areas: normalized.entities.areas
+    }
     this.setState({
-      store: configureStore(persistedState),
+      store: configureStore(mappedState),
       isStoreLoading: false
     })
   }

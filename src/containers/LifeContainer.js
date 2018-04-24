@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import { compose } from 'redux'
 import { connect } from 'react-redux'
-import Todo from '../lib/Todo'
 import { withStyles } from 'material-ui/styles'
 import AppBar from 'material-ui/AppBar'
 import Toolbar from 'material-ui/Toolbar'
@@ -11,7 +10,7 @@ import AddIcon from 'material-ui-icons/Add'
 import TodoForm from '../components/TodoForm'
 import TodoListContainer from '../containers/TodoListContainer'
 import Sidebar from '../components/Sidebar'
-import { addTodo } from '../reducers/todoList.reducer'
+import { addTodo } from '../reducers/tasks.reducer'
 import { toggleFormOpen } from '../reducers/todoForm.reducer'
 
 const styles = theme => ({
@@ -43,10 +42,7 @@ class LifeContainer extends Component {
   }
 
   addTodo() {
-    const newTodo = new Todo()
-
-    this.props.toggleFormOpen(newTodo, true)
-    this.props.addTodo(newTodo)
+    this.props.toggleFormOpen(undefined, true)
   }
 
   render() {
@@ -69,7 +65,7 @@ class LifeContainer extends Component {
           <TodoForm />
           <Button
             variant="fab"
-            id="add-todo-button"
+            id="add-task-button"
             color="primary"
             onClick={this.addTodo}>
             <AddIcon />

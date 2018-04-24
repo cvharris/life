@@ -7,17 +7,17 @@ import { connect } from 'react-redux'
 
 class TodoList extends Component {
   render() {
-    const { todoIds } = this.props
+    const { taskIds } = this.props
 
-    if (todoIds.length === 0) {
-      return <h1 style={{ textAlign: 'center' }}>No todos yet! Go add some!</h1>
+    if (taskIds.length === 0) {
+      return <h1 style={{ textAlign: 'center' }}>No tasks yet! Go add some!</h1>
     }
 
     return (
-      <div className="todo-list">
+      <div className="task-list">
         <List dense={true}>
-          {todoIds.map((todoId, i) => (
-            <TodoListItem key={todoId} todoId={todoId} listIndex={i} />
+          {taskIds.map((taskId, i) => (
+            <TodoListItem key={taskId} taskId={taskId} />
           ))}
         </List>
       </div>
@@ -28,7 +28,7 @@ class TodoList extends Component {
 export default DragDropContext(HTML5Backend)(
   connect(state => {
     return {
-      todoIds: state.todoList.filteredTodos.map(t => t.id)
+      taskIds: state.tasks.allIds
     }
   })(TodoList)
 )

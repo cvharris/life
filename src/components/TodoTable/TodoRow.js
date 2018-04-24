@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { updateTodo, deleteTodo } from '../../reducers/todoList.reducer'
+import { updateTodo, deleteTodo } from '../../reducers/tasks.reducer'
 import { connect } from 'react-redux'
 import { toggleFormOpen } from '../../reducers/todoForm.reducer'
 import Checkbox from 'material-ui/Checkbox'

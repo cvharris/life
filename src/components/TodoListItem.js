@@ -5,32 +5,22 @@ import {
   ListItemText,
   ListItemSecondaryAction
 } from 'material-ui/List'
-import Chip from 'material-ui/Chip'
 import Checkbox from 'material-ui/Checkbox'
 import IconButton from 'material-ui/IconButton'
 import DeleteIcon from 'material-ui-icons/Delete'
 import EditIcon from 'material-ui-icons/Edit'
 import { connect } from 'react-redux'
 import { DropTarget, DragSource } from 'react-dnd'
-import { getTodoList } from '../selectors/todoList.selectors'
-import {
-  updateTodo,
-  deleteTodo,
-  moveTodos,
-  updateTodoPositions
-} from '../reducers/todoList.reducer'
+import throttle from 'lodash/throttle'
+import { updateTodo, deleteTodo, moveTodos } from '../reducers/tasks.reducer'
 import { toggleFormOpen } from '../reducers/todoForm.reducer'
 import { removeCategoryFromTodo } from '../reducers/categories.reducer'
 
 const todoListItemSource = {
   beginDrag(props) {
     return {
-      id: props.todoId,
-      listIndex: props.listIndex
+      id: props.taskId
     }
-  },
-  endDrag(props, monitor) {
-    props.updateTodoPositions()
   }
 }
 
@@ -39,18 +29,21 @@ const todoTarget = {
     return false
   },
 
-  hover(props, monitor) {
-    const dragIndex = monitor.getItem().listIndex
-    const hoverIndex = props.listIndex
+  hover: throttle((props, monitor) => {
+    if (!monitor.getItem()) {
+      return
+    }
+    const dragId = monitor.getItem().id
+    const hoverId = props.taskId
 
     // Don't replace items with themselves
-    if (dragIndex === hoverIndex) {
+    if (dragId === hoverId) {
       return
     }
 
-    props.moveTodos(dragIndex, hoverIndex)
-    monitor.getItem().listIndex = hoverIndex
-  }
+    console.log('derp')
+    props.moveTodos(dragId, hoverId)
+  }, 100)
 }
 
 class TodoListItem extends Component {
@@ -61,13 +54,13 @@ class TodoListItem extends Component {
   }
 
   shouldComponentUpdate(newProps) {
-    if (this.props.todo.description !== newProps.todo.description) {
+    if (this.props.task.description !== newProps.task.description) {
       return true
     }
-    if (this.props.todo.isComplete !== newProps.todo.isComplete) {
+    if (this.props.task.isComplete !== newProps.task.isComplete) {
       return true
     }
-    if (this.props.todo.area !== newProps.todo.area) {
+    if (this.props.task.area !== newProps.task.area) {
       return true
     }
     return false
@@ -75,8 +68,8 @@ class TodoListItem extends Component {
 
   handleRemovingCategory(category) {
     this.props.updateTodo({
-      ...this.props.todo,
-      categories: this.props.todo.categories.filter(
+      ...this.props.task,
+      categories: this.props.task.categories.filter(
         cat => cat.id !== category.id
       )
     })
@@ -84,8 +77,8 @@ class TodoListItem extends Component {
 
   render() {
     const {
-      todoId,
-      todo,
+      taskId,
+      task,
       toggleFormOpen,
       todoChecked,
       deleteTodo,
@@ -93,21 +86,21 @@ class TodoListItem extends Component {
       connectDragSource,
       connectDropTarget
     } = this.props
-    const { isComplete, description } = todo
-    const area = todo.area ? todo.area : { category: { label: '' }, label: '' }
+    const { isComplete, description, category } = task
+    const area = task.area ? task.area : { label: '' }
     const opacity = isDragging ? 0 : 1
 
     return connectDragSource(
       connectDropTarget(
         <div
-          key={todoId}
+          key={taskId}
           className={
-            isComplete ? 'todo-list-item is-completed' : 'todo-list-item'
+            isComplete ? 'task-list-item is-completed' : 'task-list-item'
           }>
           <ListItem style={{ opacity }}>
-            <Checkbox checked={isComplete} onChange={() => todoChecked(todo)} />
+            <Checkbox checked={isComplete} onChange={() => todoChecked(task)} />
             <ListItemText
-              className="todo-description"
+              className="task-description"
               disableTypography={true}
               primary={
                 <h3 className="MuiTypography-root-42 MuiTypography-subheading-49 MuiListItemText-primary-106 MuiListItemText-textDense-108">
@@ -116,21 +109,21 @@ class TodoListItem extends Component {
               }
               secondary={
                 <div>
-                  {area.category.label} - {area.label}
+                  {category.label} - {area.label}
                 </div>
               }
             />
-            <ListItemSecondaryAction className="todo-actions">
+            <ListItemSecondaryAction className="task-actions">
               <IconButton
-                className="todo-edit"
+                className="task-edit"
                 aria-label="Edit"
-                onClick={() => toggleFormOpen(todo)}>
+                onClick={() => toggleFormOpen(taskId)}>
                 <EditIcon />
               </IconButton>
               <IconButton
-                className="todo-delete"
+                className="task-delete"
                 aria-label="Delete"
-                onClick={() => deleteTodo(todo)}>
+                onClick={() => deleteTodo(task)}>
                 <DeleteIcon />
               </IconButton>
             </ListItemSecondaryAction>
@@ -152,32 +145,27 @@ export default flow(
     }
   }),
   connect(
-    (state, props) => {
-      return {
-        todo: getTodoList(state).find(t => t.id === props.todoId)
-      }
-    },
+    (state, props) => ({
+      task: state.tasks.byId[props.taskId]
+    }),
     dispatch => ({
-      todoChecked(todo) {
-        dispatch(updateTodo({ ...todo, isComplete: !todo.isComplete }))
+      todoChecked(task) {
+        dispatch(updateTodo({ ...task, isComplete: !task.isComplete }))
       },
-      updateTodo(todo) {
-        dispatch(updateTodo(todo))
+      updateTodo(task) {
+        dispatch(updateTodo(task))
       },
-      toggleFormOpen(todo) {
-        dispatch(toggleFormOpen(todo, true))
+      toggleFormOpen(taskId) {
+        dispatch(toggleFormOpen(taskId, true))
       },
       moveTodos(dragIndex, hoverIndex) {
         dispatch(moveTodos(dragIndex, hoverIndex))
       },
-      deleteTodo(todo) {
-        dispatch(deleteTodo(todo))
+      deleteTodo(task) {
+        dispatch(deleteTodo(task))
       },
-      removeCategory(todo, category) {
-        dispatch(removeCategoryFromTodo(todo, category))
-      },
-      updateTodoPositions() {
-        dispatch(updateTodoPositions())
+      removeCategory(task, category) {
+        dispatch(removeCategoryFromTodo(task, category))
       }
     })
   )

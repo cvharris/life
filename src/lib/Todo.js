@@ -5,6 +5,7 @@ export default class Todo {
     this.id = v4()
     this.description = ''
     this.isComplete = false
+    this.category = null
     this.area = null
     this.type = null
     this.project = null
