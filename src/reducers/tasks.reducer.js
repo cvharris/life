@@ -12,9 +12,9 @@ import todo from './todo.reducer'
 export const updateTodo = todo => ({ type: UPDATE_TODO, payload: todo })
 export const addTodo = todo => ({ type: ADD_TODO, payload: todo })
 export const deleteTodo = todo => ({ type: DELETE_TODO, payload: todo })
-export const moveTodos = (dragIndex, hoverIndex) => ({
+export const moveTodos = (dragId, hoverId) => ({
   type: MOVE_TODOS,
-  payload: { dragIndex, hoverIndex }
+  payload: { dragId, hoverId }
 })
 export const updateTodoPositions = () => ({ type: UPDATE_TODO_POSITIONS })
 export const filterTodos = (categoryId, areaId) => ({

@@ -1,6 +1,5 @@
 import Todo from '../lib/Todo'
-import { ADD_TODO, UPDATE_TODO } from './todoList.reducer'
-import { DELETE_CATEGORY } from './categories.reducer'
+import { ADD_TODO, UPDATE_TODO, DELETE_CATEGORY } from '../conf/ActionTypes'
 
 export default (state, action) => {
   switch (action.type) {
