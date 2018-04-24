@@ -1,11 +1,12 @@
-export const CATEGORIZE_TODO = 'CATEGORIZE_TODO'
-export const REMOVE_TODO_CATEGORY = 'REMOVE_TODO_CATEGORY'
-export const ADD_CATEGORY = 'ADD_CATEGORY'
-export const UPDATE_CATEGORY = 'UPDATE_CATEGORY'
-export const DELETE_CATEGORY = 'DELETE_CATEGORY'
-export const ADD_AREA_TO_CATEGORY = 'ADD_AREA_TO_CATEGORY'
-export const UPDATE_AREA = 'UPDATE_AREA'
-export const DELETE_AREA = 'DELETE_AREA'
+import {
+  CATEGORIZE_TODO,
+  REMOVE_TODO_CATEGORY,
+  ADD_CATEGORY,
+  ADD_AREA_TO_CATEGORY,
+  DELETE_AREA,
+  UPDATE_CATEGORY,
+  DELETE_CATEGORY
+} from '../conf/ActionTypes'
 
 export const categorizeTodo = (todoId, category) => ({
   type: CATEGORIZE_TODO,
@@ -23,10 +24,6 @@ export const addAreaToCategory = (area, categoryId) => ({
   type: ADD_AREA_TO_CATEGORY,
   payload: { area, categoryId }
 })
-export const updateAreaInCategory = (area, categoryId) => ({
-  type: UPDATE_AREA,
-  payload: { area, categoryId }
-})
 export const deleteArea = (area, categoryId) => ({
   type: DELETE_AREA,
   payload: { area, categoryId }
@@ -41,48 +38,54 @@ export const deleteCategory = category => ({
 })
 
 // Initial State
-export const initialState = []
+export const initialState = {
+  byId: {},
+  allIds: []
+}
 
-export default (state = initialState, { type, payload }) => {
+export default (state = initialState, { type = '', payload }) => {
   switch (type) {
     case ADD_CATEGORY:
-      return [...state, payload]
+      return {
+        byId: { ...state.byId, [payload.id]: payload },
+        allIds: [...state.allIds, payload.id]
+      }
     case DELETE_CATEGORY:
-      return state.filter(cat => cat.id !== payload.id)
+      const { [payload.id]: deletedCategory, ...newState } = state.byId
+      return {
+        byId: newState,
+        allIds: state.allIds.filter(cId => cId !== payload.id)
+      }
     case UPDATE_CATEGORY:
-      return state.map(
-        cat =>
-          cat.id === payload.id ? Object.assign({}, cat, { ...payload }) : cat
-      )
+      return {
+        ...state,
+        byId: { ...state.byId, [payload.id]: payload }
+      }
     case ADD_AREA_TO_CATEGORY:
-      return state.map(
-        cat =>
-          cat.id === payload.categoryId
-            ? { ...cat, areas: [...cat.areas, payload.area] }
-            : cat
-      )
-    case UPDATE_AREA:
-      return state.map(
-        cat =>
-          cat.id === payload.categoryId
-            ? {
-                ...cat,
-                areas: cat.areas.map(
-                  area => (area.id === payload.area.id ? payload.area : area)
-                )
-              }
-            : cat
-      )
+      const categoryToAddTo = state.byId[payload.categoryId]
+      return {
+        ...state,
+        byId: {
+          ...state.byId,
+          [payload.categoryId]: {
+            ...categoryToAddTo,
+            areas: [...categoryToAddTo.areas, payload.area.id]
+          }
+        }
+      }
     case DELETE_AREA:
-      return state.map(
-        cat =>
-          cat.id === payload.categoryId
-            ? {
-                ...cat,
-                areas: cat.areas.filter(area => area.id !== payload.area.id)
-              }
-            : cat
-      )
+      const categoryToDeleteFrom = state.byId[payload.categoryId]
+      return {
+        ...state,
+        byId: {
+          [payload.categoryId]: {
+            ...categoryToDeleteFrom,
+            areas: categoryToDeleteFrom.areas.filter(
+              areaId => areaId !== payload.area.id
+            )
+          }
+        }
+      }
     default:
       return state
   }
