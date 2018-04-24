@@ -1,13 +1,13 @@
-.todo-list {
+.task-list {
   max-height: calc(100% - 64px);
   overflow: auto;
 }
 
-.todo-form {
+.task-form {
   margin: 2rem 0;
 }
 
-#add-todo-button {
+#add-task-button {
   position: absolute;
   bottom: 2rem;
   right: 2rem;
@@ -18,16 +18,16 @@
   padding-left: 0.5rem;
 }
 
-.is-completed .todo-description h3 {
+.is-completed .task-description h3 {
   text-decoration: line-through;
   color: rgba(185, 185, 185, 0.6);
 }
 
-.todo-list-item .todo-actions {
+.task-list-item .task-actions {
   display: none;
 }
 
-.todo-list-item:hover .todo-actions {
+.task-list-item:hover .task-actions {
   display: block;
 }
 
