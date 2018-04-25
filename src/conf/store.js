@@ -40,8 +40,6 @@ const configureStore = persistedState => {
         lifeSchema,
         normalizedEntities
       )
-      // TODO: this is quick and easy data cleansing. Remove this later
-      // state.todoList.todos = state.todoList.todos.map(todo => new Todo(todo))
       saveState(denormalized)
     }, 1000)
   )

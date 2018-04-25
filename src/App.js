@@ -1,11 +1,11 @@
 import React, { Component } from 'react'
 import './App.css'
 import { Provider } from 'react-redux'
-// import { loadState } from './conf/localStorage'
+import { loadState } from './conf/localStorage'
 import configureStore from './conf/store'
 import LifeContainer from './containers/LifeContainer'
 import lifeSchema from './conf/schema'
-import data from './data'
+// import data from './data' // NOTE: Use this instead of persisted state for testing
 import { normalize } from 'normalizr'
 
 export default class App extends Component {
@@ -19,8 +19,8 @@ export default class App extends Component {
   }
 
   componentWillMount() {
-    // const persistedState = loadState()
-    const normalized = normalize(data, lifeSchema)
+    const persistedState = loadState()
+    const normalized = normalize(persistedState, lifeSchema)
     const mappedState = {
       tasks: {
         byId: normalized.entities.tasks,
