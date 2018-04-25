@@ -16,19 +16,20 @@ class TodoForm extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      task: new Todo()
+      task: this.setupForm()
     }
     this.descriptionField = null
 
     this.updateText = this.updateText.bind(this)
     this.submitForm = this.submitForm.bind(this)
     this.handleAreaUpdate = this.handleAreaUpdate.bind(this)
+    this.setupForm = this.setupForm.bind(this)
   }
 
   componentWillReceiveProps(newProps) {
     const taskToSet = newProps.taskId
       ? this.props.tasks[newProps.taskId]
-      : new Todo()
+      : this.setupForm()
     this.setState({
       task: taskToSet
     })
@@ -54,6 +55,18 @@ class TodoForm extends Component {
     })
   }
 
+  setupForm() {
+    const { currentFilter, areas, categories } = this.props
+    const properties = {}
+    if (currentFilter.type === 'AREA') {
+      properties.area = areas[currentFilter.val]
+      properties.category = categories[properties.area.category]
+    } else if (currentFilter.type === 'CATEGORY') {
+      properties.category = categories[currentFilter.val]
+    }
+    return new Todo(properties)
+  }
+
   submitForm() {
     if (this.props.taskId) {
       this.props.updateTodo(this.state.task)
@@ -62,7 +75,7 @@ class TodoForm extends Component {
       this.props.addTodo(this.state.task)
     }
     this.setState({
-      task: new Todo()
+      task: this.setupForm()
     })
   }
 
@@ -144,7 +157,8 @@ export default connect(
     formOpen: state.todoForm.formOpen,
     areas: state.areas,
     categories: state.categories.byId,
-    categoryIds: state.categories.allIds
+    categoryIds: state.categories.allIds,
+    currentFilter: state.currentFilter
   }),
   { closeModal, updateTodo, addTodo, toggleFormOpen }
 )(TodoForm)
