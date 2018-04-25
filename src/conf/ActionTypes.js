@@ -4,7 +4,7 @@ export const UPDATE_TODO = 'UPDATE_TODO'
 export const DELETE_TODO = 'DELETE_TODO'
 export const MOVE_TODOS = 'MOVE_TODOS'
 export const UPDATE_TODO_POSITIONS = 'UPDATE_TODO_POSITIONS'
-export const FILTER_TODOS = 'FILTER_TODOS'
+export const FILTER_TASKS = 'FILTER_TASKS'
 
 // Categories
 export const CATEGORIZE_TODO = 'CATEGORIZE_TODO'

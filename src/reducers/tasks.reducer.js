@@ -4,8 +4,7 @@ import {
   UPDATE_TODO,
   DELETE_TODO,
   MOVE_TODOS,
-  UPDATE_TODO_POSITIONS,
-  FILTER_TODOS
+  UPDATE_TODO_POSITIONS
 } from '../conf/ActionTypes'
 import todo from './todo.reducer'
 
@@ -17,10 +16,6 @@ export const moveTodos = (dragId, hoverId) => ({
   payload: { dragId, hoverId }
 })
 export const updateTodoPositions = () => ({ type: UPDATE_TODO_POSITIONS })
-export const filterTodos = (categoryId, areaId) => ({
-  type: FILTER_TODOS,
-  payload: { categoryId, areaId }
-})
 
 // Initial State
 export const initialState = {
@@ -71,36 +66,11 @@ export default (state = initialState, { type = '', payload }) => {
           [hoverId]: { ...state.byId[hoverId], position: newHoverPosition }
         }
       }
-    case 'MAP_TASKS':
-      return {
-        allIds: payload.map(t => t.id),
-        byId: payload.reduce((map, t) => {
-          map[t.id] = t
-          return map
-        }, {})
-      }
     // TODO: must transform a list of todos by category/area
     // case DELETE_CATEGORY:
     //   return {
     //     ...state,
     //     todos: state.todos.map(t => todo(t, { type, payload }))
-    //   }
-    // TODO: move this action to different reducer
-    // case FILTER_TODOS:
-    //   return {
-    //     ...state,
-    //     filteredTodos: state.todos.filter(t => {
-    //       if (!payload.categoryId && !payload.areaId) {
-    //         return true
-    //       } else if (!payload.areaId) {
-    //         return t.area.category.id === payload.categoryId
-    //       } else {
-    //         return (
-    //           t.area.id === payload.areaId &&
-    //           t.area.category.id === payload.categoryId
-    //         )
-    //       }
-    //     })
     //   }
     default:
       return state

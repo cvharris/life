@@ -228,13 +228,4 @@ describe('tasks', () => {
       expect(newState.byId[hoverId].position).toBe(1)
     })
   })
-
-  it('converts old data to new', () => {
-    console.log(
-      tasks(initialState, {
-        type: 'MAP_TASKS',
-        payload: oldData.todoList.todos
-      })
-    )
-  })
 })

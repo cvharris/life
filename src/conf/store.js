@@ -8,6 +8,7 @@ import tasks from '../reducers/tasks.reducer'
 import categories from '../reducers/categories.reducer'
 import areas from '../reducers/areas.reducer'
 import todoForm from '../reducers/todoForm.reducer'
+import currentFilter from '../reducers/currentFilter.reducer'
 
 const configureStore = persistedState => {
   const store = createStore(
@@ -15,7 +16,8 @@ const configureStore = persistedState => {
       tasks,
       areas,
       categories,
-      todoForm
+      todoForm,
+      currentFilter
     }),
     persistedState,
     composeWithDevTools()

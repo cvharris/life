@@ -4,6 +4,7 @@ import HTML5Backend from 'react-dnd-html5-backend'
 import { DragDropContext } from 'react-dnd'
 import TodoListItem from './TodoListItem'
 import { connect } from 'react-redux'
+import { getFilteredTaskIds } from '../selectors/filteredTasks.selectors'
 
 class TodoList extends Component {
   render() {
@@ -28,7 +29,7 @@ class TodoList extends Component {
 export default DragDropContext(HTML5Backend)(
   connect(state => {
     return {
-      taskIds: state.tasks.allIds
+      taskIds: getFilteredTaskIds(state)
     }
   })(TodoList)
 )

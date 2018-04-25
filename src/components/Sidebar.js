@@ -19,7 +19,7 @@ import ClearAllIcon from 'material-ui-icons/ClearAll'
 import TrendingUpIcon from 'material-ui-icons/TrendingUp'
 import CategoryForm from './CategoryForm'
 import { deleteCategory } from '../reducers/categories.reducer'
-// import { filterTodos } from '../reducers/todoList.reducer'
+import { filterTasks } from '../reducers/currentFilter.reducer'
 import { compose } from 'redux'
 import { connect } from 'react-redux'
 
@@ -77,7 +77,13 @@ class Sidebar extends Component {
       selectedCategoryId: categoryId,
       selectedAreaId: areaId
     })
-    // this.props.filterTodos(categoryId, areaId)
+    if (!categoryId && !areaId) {
+      this.props.filterTasks('', null)
+    } else {
+      const filterType = areaId ? 'AREA' : 'CATEGORY'
+      const filterVal = areaId ? areaId : categoryId
+      this.props.filterTasks(filterType, filterVal)
+    }
   }
 
   render() {
@@ -230,7 +236,8 @@ export default compose(
       categories: state.categories.byId
     }),
     {
-      deleteCategory
+      deleteCategory,
+      filterTasks
     }
   )
 )(Sidebar)
