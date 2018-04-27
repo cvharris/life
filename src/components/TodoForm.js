@@ -56,10 +56,10 @@ class TodoForm extends Component {
   }
 
   setupForm() {
-    const { currentFilter, areas, categories } = this.props
+    const { currentFilter } = this.props
     const properties = {}
-    properties.area = areas[currentFilter.area]
-    properties.category = categories[currentFilter.category]
+    properties.area = currentFilter.area
+    properties.category = currentFilter.category
     return new Todo(properties)
   }
 
@@ -114,7 +114,7 @@ class TodoForm extends Component {
           <Select
             native
             onChange={this.handleAreaUpdate}
-            value={task.area ? task.area.id : ''}>
+            value={task.area ? task.area : ''}>
             <option value="">-- Pick an Area --</option>
             {categoryIds.map(categoryId => {
               const category = categories[categoryId]
