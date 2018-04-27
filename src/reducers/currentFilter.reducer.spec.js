@@ -9,11 +9,10 @@ describe('filter reducer', () => {
   it('sets the filter', () => {
     const filterAction = {
       type: types.FILTER_TASKS,
-      payload: { type: 'AREAS', val: '51' }
+      payload: { area: '51' }
     }
     const newState = filter(initialState, filterAction)
 
-    expect(newState.type).toBe('AREAS')
-    expect(newState.val).toBe('51')
+    expect(newState.area).toBe('51')
   })
 })

@@ -1,19 +1,20 @@
 import { FILTER_TASKS } from '../conf/ActionTypes'
 
-export const filterTasks = (type, val) => ({
+export const filterTasks = filterObj => ({
   type: FILTER_TASKS,
-  payload: { type, val }
+  payload: filterObj
 })
 
 export const initialState = {
-  type: '',
-  val: null
+  isComplete: null,
+  category: null,
+  area: null
 }
 
 export default (state = initialState, { type, payload }) => {
   switch (type) {
     case FILTER_TASKS:
-      return { type: payload.type, val: payload.val }
+      return Object.assign({}, state, payload)
     default:
       return state
   }

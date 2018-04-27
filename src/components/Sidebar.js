@@ -41,8 +41,6 @@ class Sidebar extends Component {
     super(props)
 
     this.state = {
-      selectedCategoryId: null,
-      selectedAreaId: null,
       currentCategoryId: null,
       categoryFormOpen: false,
       currentAreaId: null,
@@ -72,23 +70,22 @@ class Sidebar extends Component {
   }
 
   selectedCategoryArea(categoryId, areaId) {
-    this.setState({
-      ...this.state,
-      selectedCategoryId: categoryId,
-      selectedAreaId: areaId
-    })
     if (!categoryId && !areaId) {
-      this.props.filterTasks('', null)
+      this.props.filterTasks({ category: null, area: null })
     } else {
-      const filterType = areaId ? 'AREA' : 'CATEGORY'
-      const filterVal = areaId ? areaId : categoryId
-      this.props.filterTasks(filterType, filterVal)
+      this.props.filterTasks({
+        category: categoryId,
+        area: areaId
+      })
     }
   }
 
   render() {
     const { classes, areas, categories, categoryIds } = this.props
-    const { selectedCategoryId, selectedAreaId } = this.state
+    const {
+      category: selectedCategoryId,
+      area: selectedAreaId
+    } = this.props.currentFilter
 
     return (
       <Drawer
@@ -233,7 +230,8 @@ export default compose(
     state => ({
       areas: state.areas,
       categoryIds: state.categories.allIds,
-      categories: state.categories.byId
+      categories: state.categories.byId,
+      currentFilter: state.currentFilter
     }),
     {
       deleteCategory,
