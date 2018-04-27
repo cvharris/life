@@ -40,6 +40,7 @@ const configureStore = persistedState => {
         lifeSchema,
         normalizedEntities
       )
+      denormalized.currentFilter = state.currentFilter
       saveState(denormalized)
     }, 1000)
   )

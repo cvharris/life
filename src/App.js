@@ -30,7 +30,8 @@ export default class App extends Component {
         byId: normalized.entities.categories,
         allIds: normalized.result.categories
       },
-      areas: normalized.entities.areas
+      areas: normalized.entities.areas,
+      currentFilter: persistedState.currentFilter
     }
     this.setState({
       store: configureStore(mappedState),
