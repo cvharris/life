@@ -1,6 +1,5 @@
 import tasks, { initialState } from './tasks.reducer'
 import * as types from '../conf/ActionTypes'
-const oldData = require('../../data.json')
 
 describe('tasks', () => {
   it('should return the initial state when no state is given', () => {

@@ -62,8 +62,14 @@ export default (state = initialState, { type = '', payload }) => {
         allIds: newIdsList,
         byId: {
           ...state.byId,
-          [dragId]: { ...state.byId[dragId], position: newDragPosition },
-          [hoverId]: { ...state.byId[hoverId], position: newHoverPosition }
+          [dragId]: todo(state.byId[dragId], {
+            type,
+            payload: { ...payload, position: newDragPosition }
+          }),
+          [hoverId]: todo(state.byId[hoverId], {
+            type,
+            payload: { ...payload, position: newHoverPosition }
+          })
         }
       }
     // TODO: must transform a list of todos by category/area

@@ -1,5 +1,10 @@
 import Todo from '../lib/Todo'
-import { ADD_TODO, UPDATE_TODO, DELETE_CATEGORY } from '../conf/ActionTypes'
+import {
+  ADD_TODO,
+  UPDATE_TODO,
+  DELETE_CATEGORY,
+  MOVE_TODOS
+} from '../conf/ActionTypes'
 
 export default (state, action) => {
   switch (action.type) {
@@ -9,9 +14,6 @@ export default (state, action) => {
       if (state.id !== action.payload.id) {
         return state
       } else {
-        if (!action.payload.position) {
-          action.payload.position = state.position
-        }
         return Object.assign({}, state, action.payload)
       }
     case DELETE_CATEGORY:
@@ -20,6 +22,11 @@ export default (state, action) => {
         categories: state.categories
           ? state.categories.filter(cat => cat.id !== action.payload.id)
           : []
+      }
+    case MOVE_TODOS:
+      return {
+        ...state,
+        position: action.payload.position
       }
     default:
       return state
