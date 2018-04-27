@@ -6,7 +6,7 @@ export const filterTasks = filterObj => ({
 })
 
 export const initialState = {
-  isComplete: null,
+  isComplete: false,
   category: null,
   area: null
 }

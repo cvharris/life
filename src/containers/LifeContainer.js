@@ -7,11 +7,14 @@ import Toolbar from 'material-ui/Toolbar'
 import Typography from 'material-ui/Typography'
 import Button from 'material-ui/Button'
 import AddIcon from 'material-ui-icons/Add'
+import { FormControlLabel } from 'material-ui/Form'
+import Switch from 'material-ui/Switch'
 import TodoForm from '../components/TodoForm'
 import TodoListContainer from '../containers/TodoListContainer'
 import Sidebar from '../components/Sidebar'
 import { addTodo } from '../reducers/tasks.reducer'
 import { toggleFormOpen } from '../reducers/todoForm.reducer'
+import { filterTasks } from '../reducers/currentFilter.reducer'
 
 const styles = theme => ({
   root: {
@@ -46,7 +49,7 @@ class LifeContainer extends Component {
   }
 
   render() {
-    const { classes } = this.props
+    const { classes, filteringComplete, filterTasks } = this.props
     return (
       <div className={classes.root}>
         <AppBar position="absolute" className={classes.appBar} color="primary">
@@ -61,6 +64,23 @@ class LifeContainer extends Component {
         <Sidebar />
         <main className={classes.content}>
           <div className={classes.toolbar} />
+          <div className={classes.toolbar}>
+            <FormControlLabel
+              control={
+                <Switch
+                  checked={filteringComplete === null}
+                  onChange={e =>
+                    filterTasks({
+                      isComplete: e.target.checked === true ? null : false
+                    })
+                  }
+                  value="filteringComplete"
+                  color="primary"
+                />
+              }
+              label="Show Completed"
+            />
+          </div>
           <TodoListContainer />
           <TodoForm />
           <Button
@@ -78,5 +98,10 @@ class LifeContainer extends Component {
 
 export default compose(
   withStyles(styles),
-  connect(state => ({}), { toggleFormOpen, addTodo })
+  connect(
+    state => ({
+      filteringComplete: state.currentFilter.isComplete
+    }),
+    { toggleFormOpen, addTodo, filterTasks }
+  )
 )(LifeContainer)

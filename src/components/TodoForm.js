@@ -49,8 +49,8 @@ class TodoForm extends Component {
     this.setState({
       task: {
         ...this.state.task,
-        area: { id: area.id, label: area.label },
-        category: { id: category.id, label: category.label }
+        area: areaId,
+        category: category.id
       }
     })
   }
@@ -58,12 +58,8 @@ class TodoForm extends Component {
   setupForm() {
     const { currentFilter, areas, categories } = this.props
     const properties = {}
-    if (currentFilter.type === 'AREA') {
-      properties.area = areas[currentFilter.val]
-      properties.category = categories[properties.area.category]
-    } else if (currentFilter.type === 'CATEGORY') {
-      properties.category = categories[currentFilter.val]
-    }
+    properties.area = areas[currentFilter.area]
+    properties.category = categories[currentFilter.category]
     return new Todo(properties)
   }
 

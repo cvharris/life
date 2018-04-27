@@ -1,5 +1,5 @@
 .task-list {
-  max-height: calc(100% - 64px);
+  max-height: calc(100% - 128px);
   overflow: auto;
 }
 
