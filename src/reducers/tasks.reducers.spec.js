@@ -32,15 +32,20 @@ describe('tasks', () => {
 
   it('should delete tasks, with extreme prejudice', () => {
     const basicState = {
-      allIds: ['5678'],
-      byId: { '5678': { id: '5678', description: 'derp' } }
+      allIds: ['5678', '3456'],
+      byId: {
+        '5678': { id: '5678', description: 'derp', position: 0 },
+        '3456': { id: '3456', description: 'yarp', position: 1 }
+      }
     }
     const newState = tasks(basicState, {
       type: types.DELETE_TODO,
-      payload: { id: '5678' }
+      payload: '5678'
     })
-    expect(newState.allIds).not.toHaveProperty('5678')
-    expect(newState.allIds.length).toBe(0)
+    expect(newState.byId).not.toHaveProperty('5678')
+    expect(newState.allIds.length).toBe(1)
+    expect(newState.byId['3456'].position).toBe(0)
+    // TODO: could be more robust by looping through whole state and comparing index to position
   })
 
   describe('moving tasks', () => {

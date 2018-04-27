@@ -123,7 +123,7 @@ class TodoListItem extends Component {
               <IconButton
                 className="task-delete"
                 aria-label="Delete"
-                onClick={() => deleteTodo(task)}>
+                onClick={() => deleteTodo(taskId)}>
                 <DeleteIcon />
               </IconButton>
             </ListItemSecondaryAction>

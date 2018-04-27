@@ -10,7 +10,7 @@ import todo from './todo.reducer'
 
 export const updateTodo = todo => ({ type: UPDATE_TODO, payload: todo })
 export const addTodo = todo => ({ type: ADD_TODO, payload: todo })
-export const deleteTodo = todo => ({ type: DELETE_TODO, payload: todo })
+export const deleteTodo = taskId => ({ type: DELETE_TODO, payload: taskId })
 export const moveTodos = (dragId, hoverId) => ({
   type: MOVE_TODOS,
   payload: { dragId, hoverId }
@@ -43,10 +43,25 @@ export default (state = initialState, { type = '', payload }) => {
         }
       }
     case DELETE_TODO:
-      const { [payload.id]: deletedTodo, ...newState } = state.byId
+      const { [payload]: deletedTask, ...restOfTasks } = state.byId
+      const nonDeletedIds = state.allIds.filter(tId => tId !== payload)
+      const newState = nonDeletedIds
+        .map((tId, i) => {
+          const mappedTask = restOfTasks[tId]
+          if (i < deletedTask.position) {
+            return mappedTask
+          } else {
+            mappedTask.position = i
+            return mappedTask
+          }
+        })
+        .reduce((reducedState, task) => {
+          reducedState[task.id] = task
+          return reducedState
+        }, {})
       return {
         byId: newState,
-        allIds: state.allIds.filter(tId => tId !== payload.id)
+        allIds: nonDeletedIds
       }
     case MOVE_TODOS:
       const { dragId, hoverId } = payload
