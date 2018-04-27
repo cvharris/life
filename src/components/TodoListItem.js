@@ -108,7 +108,7 @@ class TodoListItem extends Component {
                 </h3>
               }
               secondary={
-                <div>
+                <div className="task-categories">
                   {category.label} - {area.label}
                 </div>
               }

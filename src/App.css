@@ -35,3 +35,15 @@
   text-decoration: none;
   background-color: rgba(0, 0, 0, 0.08);
 }
+
+.task-categories {
+  color: #9d9d9d;
+}
+
+.nav-item .sidebar-icon {
+  opacity: 0;
+}
+
+.nav-item:hover .sidebar-icon {
+  opacity: 1;
+}
