@@ -1,6 +1,5 @@
 import { schema } from 'normalizr'
 
-const task = new schema.Entity('tasks')
 const area = new schema.Entity(
   'areas',
   {},
@@ -13,6 +12,10 @@ const area = new schema.Entity(
 )
 const category = new schema.Entity('categories', {
   areas: [area]
+})
+const task = new schema.Entity('tasks', {
+  area: area,
+  category: category
 })
 
 export default { tasks: [task], categories: [category] }

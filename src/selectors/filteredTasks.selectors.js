@@ -10,12 +10,10 @@ export const getFilteredTaskIds = createSelector(
     switch (filter.type) {
       case 'CATEGORY':
         return allTasks
-          .filter(task => task.category.id === filter.val)
+          .filter(task => task.category === filter.val)
           .map(t => t.id)
       case 'AREA':
-        return allTasks
-          .filter(task => task.area.id === filter.val)
-          .map(t => t.id)
+        return allTasks.filter(task => task.area === filter.val).map(t => t.id)
       default:
         return allTasks.map(t => t.id)
     }

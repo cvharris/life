@@ -11,7 +11,7 @@ import DeleteIcon from 'material-ui-icons/Delete'
 import EditIcon from 'material-ui-icons/Edit'
 import { connect } from 'react-redux'
 import { DropTarget, DragSource } from 'react-dnd'
-import throttle from 'lodash/throttle'
+// import throttle from 'lodash/throttle'
 import { updateTodo, deleteTodo, moveTodos } from '../reducers/tasks.reducer'
 import { toggleFormOpen } from '../reducers/todoForm.reducer'
 import { removeCategoryFromTodo } from '../reducers/categories.reducer'
@@ -29,7 +29,7 @@ const todoTarget = {
     return false
   },
 
-  hover: throttle((props, monitor) => {
+  hover: (props, monitor) => {
     if (!monitor.getItem()) {
       return
     }
@@ -42,7 +42,7 @@ const todoTarget = {
     }
 
     props.moveTodos(dragId, hoverId)
-  }, 100)
+  }
 }
 
 class TodoListItem extends Component {
@@ -78,6 +78,8 @@ class TodoListItem extends Component {
     const {
       taskId,
       task,
+      area,
+      category,
       toggleFormOpen,
       todoChecked,
       deleteTodo,
@@ -85,8 +87,7 @@ class TodoListItem extends Component {
       connectDragSource,
       connectDropTarget
     } = this.props
-    const { isComplete, description, category } = task
-    const area = task.area ? task.area : { label: '' }
+    const { isComplete, description } = task
     const opacity = isDragging ? 0 : 1
 
     return connectDragSource(
@@ -144,9 +145,14 @@ export default flow(
     }
   }),
   connect(
-    (state, props) => ({
-      task: state.tasks.byId[props.taskId]
-    }),
+    (state, props) => {
+      const foundTask = state.tasks.byId[props.taskId]
+      return {
+        task: foundTask,
+        area: state.areas[foundTask.area],
+        category: state.categories.byId[foundTask.category]
+      }
+    },
     dispatch => ({
       todoChecked(task) {
         dispatch(updateTodo({ ...task, isComplete: !task.isComplete }))
