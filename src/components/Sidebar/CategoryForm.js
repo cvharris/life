@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import TextField from 'material-ui/TextField'
-import Category from '../lib/Category'
+import Category from '../../lib/Category'
 import Button from 'material-ui/Button'
 import Dialog, {
   DialogActions,
@@ -11,8 +11,9 @@ import {
   addCategory,
   updateCategory,
   deleteCategory
-} from '../reducers/categories.reducer'
+} from '../../reducers/categories.reducer'
 import { connect } from 'react-redux'
+import SidebarContext from './SidebarContext'
 
 class CategoryForm extends Component {
   constructor(props) {
@@ -22,10 +23,6 @@ class CategoryForm extends Component {
       dialogTitle: 'Add Category',
       categoryLabel: ''
     }
-
-    this.handleTyping = this.handleTyping.bind(this)
-    this.submitCategoryForm = this.submitCategoryForm.bind(this)
-    this.handleDeletingCategory = this.handleDeletingCategory.bind(this)
   }
 
   componentWillReceiveProps(nextProps) {
@@ -47,14 +44,14 @@ class CategoryForm extends Component {
     }
   }
 
-  handleTyping(val) {
+  handleTyping = val => {
     this.setState({
       ...this.state,
       categoryLabel: val
     })
   }
 
-  submitCategoryForm() {
+  submitCategoryForm = () => {
     const {
       category,
       toggleForm,
@@ -76,7 +73,7 @@ class CategoryForm extends Component {
     toggleForm()
   }
 
-  handleDeletingCategory() {
+  handleDeletingCategory = () => {
     this.props.deleteCategory(this.props.category)
     this.props.toggleForm()
   }
@@ -123,6 +120,18 @@ class CategoryForm extends Component {
   }
 }
 
+export const ContextualizedCategoryForm = props => (
+  <SidebarContext.Consumer>
+    {({ categoryFormOpen, toggleCategoryForm }) => (
+      <CategoryForm
+        {...props}
+        formOpen={categoryFormOpen}
+        toggleForm={toggleCategoryForm}
+      />
+    )}
+  </SidebarContext.Consumer>
+)
+
 export default connect(
   (state, ownProps) => {
     const currentCategory = ownProps.categoryId
@@ -133,4 +142,4 @@ export default connect(
     }
   },
   { addCategory, updateCategory, deleteCategory }
-)(CategoryForm)
+)(ContextualizedCategoryForm)

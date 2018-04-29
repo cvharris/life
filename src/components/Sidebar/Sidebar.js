@@ -2,14 +2,16 @@ import React, { Component } from 'react'
 import { withStyles } from 'material-ui/styles'
 import Drawer from 'material-ui/Drawer'
 import Divider from 'material-ui/Divider'
-import AreaForm from '../AreaForm'
-import CategoryForm from '../CategoryForm'
+import AreaForm from './AreaForm'
+import CategoryForm from './CategoryForm'
 import { deleteCategory } from '../../reducers/categories.reducer'
 import { filterTasks } from '../../reducers/currentFilter.reducer'
 import { compose } from 'redux'
 import { connect } from 'react-redux'
 import AppNav from './AppNav'
 import CategoryList from './CategoryList'
+// import ProjectsList from './ProjectsList'
+import SidebarContext from './SidebarContext'
 
 const drawerWidth = 240
 
@@ -25,29 +27,29 @@ class Sidebar extends Component {
   constructor(props) {
     super(props)
 
-    // TODO: rewrite this using React 16.3 Context API
     this.state = {
       currentCategoryId: null,
       categoryFormOpen: false,
       currentAreaId: null,
       areaFormOpen: false,
-      areasOpen: true
+      currentProjectId: null,
+      projectFormOpen: false,
+      toggleCategoryForm: this.toggleCategoryForm,
+      toggleAreaForm: this.toggleAreaForm,
+      toggleProjectForm: this.toggleProjectForm,
+      selectCategoryArea: this.selectCategoryArea,
+      selectProject: this.selectProject
     }
-
-    this.toggleCategoryForm = this.toggleCategoryForm.bind(this)
-    this.toggleAreaForm = this.toggleAreaForm.bind(this)
-    this.selectCategoryArea = this.selectCategoryArea.bind(this)
   }
 
-  toggleCategoryForm(categoryId) {
-    this.setState({
-      ...this.state,
+  toggleCategoryForm = categoryId => {
+    this.setState(state => ({
       currentCategoryId: categoryId || null,
       categoryFormOpen: !this.state.categoryFormOpen
-    })
+    }))
   }
 
-  toggleAreaForm(areaId, categoryId) {
+  toggleAreaForm = (areaId, categoryId) => {
     this.setState({
       ...this.state,
       currentCategoryId: categoryId || null,
@@ -56,7 +58,7 @@ class Sidebar extends Component {
     })
   }
 
-  selectCategoryArea(categoryId, areaId) {
+  selectCategoryArea = (categoryId, areaId) => {
     if (!categoryId && !areaId) {
       this.props.filterTasks({ category: null, area: null })
     } else {
@@ -64,6 +66,19 @@ class Sidebar extends Component {
         category: categoryId,
         area: areaId
       })
+    }
+  }
+
+  toggleProjectForm = projectId => {
+    this.setState(state => ({
+      currentProjectId: projectId,
+      projectFormOpen: !state.projectFormOpen
+    }))
+  }
+
+  selectProject = projectId => {
+    if (!projectId) {
+      // TODO: filter tasks by project
     }
   }
 
@@ -75,35 +90,29 @@ class Sidebar extends Component {
     } = this.props.currentFilter
 
     return (
-      <Drawer
-        variant="permanent"
-        classes={{
-          paper: classes.drawerPaper
-        }}>
-        <div className={classes.toolbar} />
-        <AppNav
-          tasksActive={!selectedCategoryId && !selectedAreaId}
-          selectCategoryArea={this.selectCategoryArea}
-        />
-        <Divider />
-        <CategoryList
-          categoryIds={categoryIds}
-          selectCategoryArea={this.selectCategoryArea}
-          toggleCategoryForm={this.toggleCategoryForm}
-          toggleAreaForm={this.toggleAreaForm}
-        />
-        <CategoryForm
-          categoryId={this.state.currentCategoryId}
-          formOpen={this.state.categoryFormOpen}
-          toggleForm={this.toggleCategoryForm}
-        />
-        <AreaForm
-          areaId={this.state.currentAreaId}
-          categoryId={this.state.currentCategoryId}
-          formOpen={this.state.areaFormOpen}
-          toggleForm={this.toggleAreaForm}
-        />
-      </Drawer>
+      <SidebarContext.Provider value={this.state}>
+        <Drawer
+          variant="permanent"
+          classes={{
+            paper: classes.drawerPaper
+          }}>
+          <div className={classes.toolbar} />
+          <AppNav
+            tasksActive={!selectedCategoryId && !selectedAreaId}
+            selectCategoryArea={this.selectCategoryArea}
+          />
+          <Divider />
+          <CategoryList categoryIds={categoryIds} />
+          <Divider />
+          {/* <ProjectsList /> */}
+          <CategoryForm categoryId={this.state.currentCategoryId} />
+          <AreaForm
+            areaId={this.state.currentAreaId}
+            categoryId={this.state.currentCategoryId}
+          />
+          {/* <ProjectForm /> */}
+        </Drawer>
+      </SidebarContext.Provider>
     )
   }
 }

@@ -6,12 +6,16 @@ import Dialog, {
   DialogContent,
   DialogTitle
 } from 'material-ui/Dialog'
-import { addAreaToCategory, deleteArea } from '../reducers/categories.reducer'
-import { updateAreaInCategory } from '../reducers/areas.reducer'
+import {
+  addAreaToCategory,
+  deleteArea
+} from '../../reducers/categories.reducer'
+import { updateAreaInCategory } from '../../reducers/areas.reducer'
 import { connect } from 'react-redux'
-import Area from '../lib/Area'
+import Area from '../../lib/Area'
+import SidebarContext from './SidebarContext'
 
-class CategoryForm extends Component {
+class AreaForm extends Component {
   constructor(props) {
     super(props)
 
@@ -19,10 +23,6 @@ class CategoryForm extends Component {
       dialogTitle: 'Add Area',
       areaLabel: ''
     }
-
-    this.handleTyping = this.handleTyping.bind(this)
-    this.submitAreaForm = this.submitAreaForm.bind(this)
-    this.handleDeletingArea = this.handleDeletingArea.bind(this)
   }
 
   componentWillReceiveProps(nextProps) {
@@ -44,14 +44,14 @@ class CategoryForm extends Component {
     }
   }
 
-  handleTyping(val) {
+  handleTyping = val => {
     this.setState({
       ...this.state,
       areaLabel: val
     })
   }
 
-  submitAreaForm() {
+  submitAreaForm = () => {
     const {
       area,
       areaId,
@@ -74,7 +74,7 @@ class CategoryForm extends Component {
     toggleForm()
   }
 
-  handleDeletingArea() {
+  handleDeletingArea = () => {
     this.props.deleteArea(this.props.area, this.props.categoryId)
     this.props.toggleForm()
   }
@@ -119,6 +119,19 @@ class CategoryForm extends Component {
   }
 }
 
+export const ContextualizedAreaForm = props => (
+  <SidebarContext.Consumer>
+    {({ areaFormOpen, toggleAreaForm, currentCategoryId }) => (
+      <AreaForm
+        {...props}
+        formOpen={areaFormOpen}
+        toggleForm={toggleAreaForm}
+        categoryId={currentCategoryId}
+      />
+    )}
+  </SidebarContext.Consumer>
+)
+
 export default connect(
   (state, ownProps) => {
     const currentArea = ownProps.areaId
@@ -129,4 +142,4 @@ export default connect(
     }
   },
   { addAreaToCategory, updateAreaInCategory, deleteArea }
-)(CategoryForm)
+)(ContextualizedAreaForm)

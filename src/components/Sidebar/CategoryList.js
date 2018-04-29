@@ -3,37 +3,33 @@ import List, { ListSubheader } from 'material-ui/List'
 import IconButton from 'material-ui/IconButton'
 import AddCircleOutlineIcon from 'material-ui-icons/AddCircleOutline'
 import CategoryListItem from './CategoryListItem'
+import SidebarContext from './SidebarContext'
 
-export default ({
-  categoryIds,
-  toggleCategoryForm,
-  toggleAreaForm,
-  selectCategoryArea
-}) => {
+export default ({ categoryIds }) => {
   return (
-    <List
-      dense={true}
-      disablePadding={true}
-      subheader={
-        <ListSubheader component="div">
-          Categories & Areas
-          <IconButton onClick={() => this.toggleCategoryForm()}>
-            <AddCircleOutlineIcon />
-          </IconButton>
-        </ListSubheader>
-      }>
-      {categoryIds.map(categoryId => {
-        return (
-          <div key={categoryId}>
-            <CategoryListItem
-              categoryId={categoryId}
-              toggleAreaForm={toggleAreaForm}
-              toggleCategoryForm={toggleCategoryForm}
-              selectCategoryArea={selectCategoryArea}
-            />
-          </div>
-        )
-      })}
-    </List>
+    <SidebarContext.Consumer>
+      {({ toggleAreaForm, toggleCategoryForm, selectCategoryArea }) => (
+        <List
+          dense={true}
+          className="category-list"
+          disablePadding={true}
+          subheader={
+            <ListSubheader component="div">
+              Categories & Areas
+              <IconButton onClick={() => toggleCategoryForm()}>
+                <AddCircleOutlineIcon />
+              </IconButton>
+            </ListSubheader>
+          }>
+          {categoryIds.map(categoryId => {
+            return (
+              <div key={categoryId}>
+                <CategoryListItem categoryId={categoryId} />
+              </div>
+            )
+          })}
+        </List>
+      )}
+    </SidebarContext.Consumer>
   )
 }
