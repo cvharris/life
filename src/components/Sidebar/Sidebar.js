@@ -10,7 +10,7 @@ import { compose } from 'redux'
 import { connect } from 'react-redux'
 import AppNav from './AppNav'
 import CategoryList from './CategoryList'
-// import ProjectsList from './ProjectsList'
+import ProjectsList from './ProjectsList'
 import SidebarContext from './SidebarContext'
 
 const drawerWidth = 240
@@ -104,7 +104,7 @@ class Sidebar extends Component {
           <Divider />
           <CategoryList categoryIds={categoryIds} />
           <Divider />
-          {/* <ProjectsList /> */}
+          <ProjectsList />
           <CategoryForm categoryId={this.state.currentCategoryId} />
           <AreaForm
             areaId={this.state.currentAreaId}

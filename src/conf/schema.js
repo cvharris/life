@@ -17,5 +17,8 @@ const task = new schema.Entity('tasks', {
   area: area,
   category: category
 })
+const project = new schema.Entity('projects', {
+  tasks: task
+})
 
-export default { tasks: [task], categories: [category] }
+export default { tasks: [task], categories: [category], projects: [project] }
