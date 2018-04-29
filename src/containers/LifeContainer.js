@@ -1,20 +1,13 @@
 import React, { Component } from 'react'
-import { compose } from 'redux'
-import { connect } from 'react-redux'
 import { withStyles } from 'material-ui/styles'
 import AppBar from 'material-ui/AppBar'
 import Toolbar from 'material-ui/Toolbar'
 import Typography from 'material-ui/Typography'
-import Button from 'material-ui/Button'
-import AddIcon from 'material-ui-icons/Add'
-import { FormControlLabel } from 'material-ui/Form'
-import Switch from 'material-ui/Switch'
-import TodoForm from '../components/TodoForm'
 import TodoListContainer from '../containers/TodoListContainer'
 import Sidebar from '../components/Sidebar/Sidebar'
-import { addTodo } from '../reducers/tasks.reducer'
-import { toggleFormOpen } from '../reducers/todoForm.reducer'
-import { filterTasks } from '../reducers/currentFilter.reducer'
+import PlannerContainer from '../containers/PlannerContainer'
+
+import { Route } from 'react-router-dom'
 
 const styles = theme => ({
   root: {
@@ -38,18 +31,8 @@ const styles = theme => ({
 })
 
 class LifeContainer extends Component {
-  constructor(props) {
-    super(props)
-
-    this.addTodo = this.addTodo.bind(this)
-  }
-
-  addTodo() {
-    this.props.toggleFormOpen(undefined, true)
-  }
-
   render() {
-    const { classes, filteringComplete, filterTasks } = this.props
+    const { classes } = this.props
     return (
       <div className={classes.root}>
         <AppBar position="absolute" className={classes.appBar} color="primary">
@@ -64,44 +47,12 @@ class LifeContainer extends Component {
         <Sidebar />
         <main className={classes.content}>
           <div className={classes.toolbar} />
-          <div className={classes.toolbar}>
-            <FormControlLabel
-              control={
-                <Switch
-                  checked={filteringComplete === null}
-                  onChange={e =>
-                    filterTasks({
-                      isComplete: e.target.checked === true ? null : false
-                    })
-                  }
-                  value="filteringComplete"
-                  color="primary"
-                />
-              }
-              label="Show Completed"
-            />
-          </div>
-          <TodoListContainer />
-          <TodoForm />
-          <Button
-            variant="fab"
-            id="add-task-button"
-            color="primary"
-            onClick={this.addTodo}>
-            <AddIcon />
-          </Button>
+          <Route path="/" exact component={TodoListContainer} />
+          <Route path="/planner" component={PlannerContainer} />
         </main>
       </div>
     )
   }
 }
 
-export default compose(
-  withStyles(styles),
-  connect(
-    state => ({
-      filteringComplete: state.currentFilter.isComplete
-    }),
-    { toggleFormOpen, addTodo, filterTasks }
-  )
-)(LifeContainer)
+export default withStyles(styles)(LifeContainer)

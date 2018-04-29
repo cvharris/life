@@ -7,6 +7,7 @@ import LifeContainer from './containers/LifeContainer'
 import lifeSchema from './conf/schema'
 // import data from './data' // NOTE: Use this instead of persisted state for testing
 import { normalize } from 'normalizr'
+import { BrowserRouter as Router } from 'react-router-dom'
 
 export default class App extends Component {
   constructor(props) {
@@ -50,7 +51,9 @@ export default class App extends Component {
 
     return (
       <Provider store={this.state.store}>
-        <LifeContainer />
+        <Router>
+          <LifeContainer />
+        </Router>
       </Provider>
     )
   }
