@@ -11,6 +11,7 @@ import { connect } from 'react-redux'
 import AppNav from './AppNav'
 import CategoryList from './CategoryList'
 import ProjectsList from './ProjectsList'
+import ProjectForm from './ProjectForm'
 import SidebarContext from './SidebarContext'
 
 const drawerWidth = 240
@@ -110,7 +111,7 @@ class Sidebar extends Component {
             areaId={this.state.currentAreaId}
             categoryId={this.state.currentCategoryId}
           />
-          {/* <ProjectForm /> */}
+          <ProjectForm projectId={this.state.currentProjectId} />
         </Drawer>
       </SidebarContext.Provider>
     )
