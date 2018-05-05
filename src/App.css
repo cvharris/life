@@ -1,5 +1,15 @@
+#task-container,
+#planner-container {
+  height: 100%;
+}
+
 .task-list {
   max-height: calc(100% - 128px);
+  overflow: auto;
+}
+
+.calendar-view {
+  max-height: calc(100% - 64px);
   overflow: auto;
 }
 

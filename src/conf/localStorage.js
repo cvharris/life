@@ -1,8 +1,10 @@
+import data from '../data'
+
 export const loadState = () => {
   try {
     const serializedState = localStorage.getItem('lifeStorage')
     if (serializedState === null) {
-      return undefined
+      return data
     }
     return JSON.parse(serializedState)
   } catch (err) {

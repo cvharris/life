@@ -9,6 +9,7 @@ import categories from '../reducers/categories.reducer'
 import areas from '../reducers/areas.reducer'
 import todoForm from '../reducers/todoForm.reducer'
 import currentFilter from '../reducers/currentFilter.reducer'
+import sessions from '../reducers/sessions.reducer'
 import projects from '../reducers/projects.reducer'
 
 const configureStore = persistedState => {
@@ -19,6 +20,7 @@ const configureStore = persistedState => {
       categories,
       todoForm,
       currentFilter,
+      sessions,
       projects
     }),
     persistedState,
@@ -31,12 +33,14 @@ const configureStore = persistedState => {
       const normalizedResult = {
         tasks: state.tasks.allIds,
         categories: state.categories.allIds,
+        sessions: state.sessions.allIds,
         projects: state.projects.allIds
       }
       const normalizedEntities = {
         tasks: state.tasks.byId,
         categories: state.categories.byId,
         areas: state.areas,
+        sessions: state.sessions.byId,
         projects: state.projects.byId
       }
       const denormalized = denormalize(

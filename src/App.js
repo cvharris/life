@@ -35,6 +35,10 @@ export default class App extends Component {
         byId: normalized.entities.projects,
         allIds: normalized.result.projects
       },
+      sessions: {
+        byId: normalized.entities.sessions,
+        allIds: normalized.result.sessions
+      },
       areas: normalized.entities.areas,
       currentFilter: persistedState.currentFilter
     }
