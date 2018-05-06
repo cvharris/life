@@ -147,10 +147,11 @@ export default flow(
   connect(
     (state, props) => {
       const foundTask = state.tasks.byId[props.taskId]
+      const foundArea = state.areas[foundTask.area]
       return {
         task: foundTask,
         area: state.areas[foundTask.area],
-        category: state.categories.byId[foundTask.category]
+        category: state.categories.byId[foundArea.category]
       }
     },
     dispatch => ({

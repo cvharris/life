@@ -10,6 +10,7 @@ const area = new schema.Entity(
     })
   }
 )
+
 const category = new schema.Entity('categories', {
   areas: [area]
 })
