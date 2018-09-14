@@ -1,10 +1,10 @@
 module.exports = {
   env: {
     browser: true,
-    node: true
+    node: true,
+    jest: true
   },
-  plugins: ['prettier'],
-  extends: 'react-app',
+  extends: ['react-app', 'plugin:prettier/recommended'],
   overrides: [
     {
       files: ['src/**/*'],

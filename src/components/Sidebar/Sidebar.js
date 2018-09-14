@@ -1,18 +1,18 @@
-import React, { Component } from 'react'
-import { withStyles } from 'material-ui/styles'
-import Drawer from 'material-ui/Drawer'
-import Divider from 'material-ui/Divider'
-import AreaForm from './AreaForm'
-import CategoryForm from './CategoryForm'
-import { deleteCategory } from '../../reducers/categories.reducer'
-import { filterTasks } from '../../reducers/currentFilter.reducer'
-import { compose } from 'redux'
-import { connect } from 'react-redux'
-import AppNav from './AppNav'
-import CategoryList from './CategoryList'
-import ProjectsList from './ProjectsList'
-import ProjectForm from './ProjectForm'
-import SidebarContext from './SidebarContext'
+import Divider from '@material-ui/core/Divider';
+import Drawer from '@material-ui/core/Drawer';
+import { withStyles } from '@material-ui/core/styles';
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { compose } from 'redux';
+import { deleteCategory } from '../../reducers/categories.reducer';
+import { filterTasks } from '../../reducers/currentFilter.reducer';
+import AppNav from './AppNav';
+import AreaForm from './AreaForm';
+import CategoryForm from './CategoryForm';
+import CategoryList from './CategoryList';
+import ProjectForm from './ProjectForm';
+import ProjectsList from './ProjectsList';
+import SidebarContext from './SidebarContext';
 
 const drawerWidth = 240
 

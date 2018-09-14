@@ -1,11 +1,8 @@
+import TableCell from '@material-ui/core/TableCell'
+import TableHead from '@material-ui/core/TableHead'
+import TableRow from '@material-ui/core/TableRow'
+import TableSortLabel from '@material-ui/core/TableSortLabel'
 import React, { Component } from 'react'
-import {
-  TableCell,
-  TableHead,
-  TableRow,
-  TableSortLabel
-} from 'material-ui/Table'
-import Checkbox from 'material-ui/Checkbox'
 
 export default class TodoTableHead extends Component {
   createSortHandler = property => event => {

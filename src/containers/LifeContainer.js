@@ -1,13 +1,13 @@
-import React, { Component } from 'react'
-import { withStyles } from 'material-ui/styles'
-import AppBar from 'material-ui/AppBar'
-import Toolbar from 'material-ui/Toolbar'
-import Typography from 'material-ui/Typography'
-import TodoListContainer from '../containers/TodoListContainer'
-import Sidebar from '../components/Sidebar/Sidebar'
-import PlannerContainer from '../containers/PlannerContainer'
+import AppBar from '@material-ui/core/AppBar';
+import { withStyles } from '@material-ui/core/styles';
+import Toolbar from '@material-ui/core/Toolbar';
+import Typography from '@material-ui/core/Typography';
+import React, { Component } from 'react';
+import { Route } from 'react-router-dom';
+import Sidebar from '../components/Sidebar/Sidebar';
+import PlannerContainer from '../containers/PlannerContainer';
+import TodoListContainer from '../containers/TodoListContainer';
 
-import { Route } from 'react-router-dom'
 
 const styles = theme => ({
   root: {

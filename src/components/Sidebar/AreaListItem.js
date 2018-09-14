@@ -1,6 +1,7 @@
+import ListItem from '@material-ui/core/ListItem'
+import ListItemText from '@material-ui/core/ListItemText'
+import EditIcon from '@material-ui/icons/Edit'
 import React, { Component } from 'react'
-import EditIcon from 'material-ui-icons/Edit'
-import { ListItem, ListItemText } from 'material-ui/List'
 import { connect } from 'react-redux'
 import SidebarContext from './SidebarContext'
 

@@ -1,10 +1,10 @@
-import React, { Component } from 'react'
-import List from 'material-ui/List'
-import HTML5Backend from 'react-dnd-html5-backend'
-import { DragDropContext } from 'react-dnd'
-import TodoListItem from './TodoListItem'
-import { connect } from 'react-redux'
-import { getFilteredTaskIds } from '../selectors/filteredTasks.selectors'
+import List from '@material-ui/core/List';
+import React, { Component } from 'react';
+import { DragDropContext } from 'react-dnd';
+import HTML5Backend from 'react-dnd-html5-backend';
+import { connect } from 'react-redux';
+import { getFilteredTaskIds } from '../selectors/filteredTasks.selectors';
+import TodoListItem from './TodoListItem';
 
 class TodoList extends Component {
   render() {

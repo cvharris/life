@@ -1,12 +1,12 @@
-import React from 'react'
-import classNames from 'classnames'
-import Typography from 'material-ui/Typography'
-import IconButton from 'material-ui/IconButton'
-import DeleteIcon from 'material-ui-icons/Delete'
-import FilterListIcon from 'material-ui-icons/FilterList'
-import Toolbar from 'material-ui/Toolbar'
-import { withStyles } from 'material-ui/styles'
-import { lighten } from 'material-ui/styles/colorManipulator'
+import IconButton from '@material-ui/core/IconButton';
+import { withStyles } from '@material-ui/core/styles';
+import { lighten } from '@material-ui/core/styles/colorManipulator';
+import Toolbar from '@material-ui/core/Toolbar';
+import Typography from '@material-ui/core/Typography';
+import classNames from 'classnames';
+import DeleteIcon from '@material-ui/icons/Delete';
+import FilterListIcon from '@material-ui/icons/FilterList';
+import React from 'react';
 
 const toolbarStyles = theme => ({
   root: {

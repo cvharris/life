@@ -1,12 +1,10 @@
+import ListItem from '@material-ui/core/ListItem'
+import ListItemIcon from '@material-ui/core/ListItemIcon'
+import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction'
+import ListItemText from '@material-ui/core/ListItemText'
+import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline'
+import EditIcon from '@material-ui/icons/Edit'
 import React, { Component } from 'react'
-import {
-  ListItem,
-  ListItemText,
-  ListItemSecondaryAction,
-  ListItemIcon
-} from 'material-ui/List'
-import EditIcon from 'material-ui-icons/Edit'
-import AddCircleOutlineIcon from 'material-ui-icons/AddCircleOutline'
 import { connect } from 'react-redux'
 import SidebarContext from './SidebarContext'
 

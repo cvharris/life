@@ -1,10 +1,13 @@
+import List from '@material-ui/core/List'
+import ListItem from '@material-ui/core/ListItem'
+import ListItemIcon from '@material-ui/core/ListItemIcon'
+import ListItemText from '@material-ui/core/ListItemText'
+import BookIcon from '@material-ui/icons/Book'
+import ClearAllIcon from '@material-ui/icons/ClearAll'
+import PlaylistAddCheckIcon from '@material-ui/icons/PlaylistAddCheck'
+import TrendingUpIcon from '@material-ui/icons/TrendingUp'
 import React from 'react'
-import List, { ListItem, ListItemIcon, ListItemText } from 'material-ui/List'
-import BookIcon from 'material-ui-icons/Book'
-import ClearAllIcon from 'material-ui-icons/ClearAll'
-import TrendingUpIcon from 'material-ui-icons/TrendingUp'
 import { Link } from 'react-router-dom'
-import PlaylistAddCheckIcon from 'material-ui-icons/PlaylistAddCheck'
 
 export default ({ selectCategoryArea, tasksActive }) => {
   return (

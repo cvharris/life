@@ -1,11 +1,12 @@
+import Checkbox from '@material-ui/core/Checkbox'
+import IconButton from '@material-ui/core/IconButton'
+import TableCell from '@material-ui/core/TableCell'
+import TableRow from '@material-ui/core/TableRow'
+import DeleteIcon from '@material-ui/icons/Delete'
 import React, { Component } from 'react'
-import { updateTodo, deleteTodo } from '../../reducers/tasks.reducer'
 import { connect } from 'react-redux'
+import { deleteTodo, updateTodo } from '../../reducers/tasks.reducer'
 import { toggleFormOpen } from '../../reducers/todoForm.reducer'
-import Checkbox from 'material-ui/Checkbox'
-import { TableCell, TableRow } from 'material-ui/Table'
-import IconButton from 'material-ui/IconButton'
-import DeleteIcon from 'material-ui-icons/Delete'
 
 class TodoRow extends Component {
   render() {

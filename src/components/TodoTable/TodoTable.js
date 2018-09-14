@@ -1,12 +1,13 @@
+import Paper from '@material-ui/core/Paper'
+import { withStyles } from '@material-ui/core/styles'
+import Table from '@material-ui/core/Table'
+import TableBody from '@material-ui/core/TableBody'
 import React, { Component } from 'react'
-import Paper from 'material-ui/Paper'
-import Table, { TableBody } from 'material-ui/Table'
-import TodoRow from './TodoRow'
-import TodoTableToolbar from './TodoTableToolbar'
-import TodoTableHead from './TodoTableHead'
-import { withStyles } from 'material-ui/styles'
-import { compose } from 'redux'
 import { connect } from 'react-redux'
+import { compose } from 'redux'
+import TodoRow from './TodoRow'
+import TodoTableHead from './TodoTableHead'
+import TodoTableToolbar from './TodoTableToolbar'
 
 const styles = theme => ({
   root: {

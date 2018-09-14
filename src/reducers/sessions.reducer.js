@@ -1,7 +1,7 @@
 import {
   ADD_SESSION,
-  UPDATE_SESSION,
-  DELETE_SESSION
+  DELETE_SESSION,
+  UPDATE_SESSION
 } from '../conf/ActionTypes'
 
 export const addSession = session => ({ type: ADD_SESSION, payload: session })

@@ -3,11 +3,11 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@material-ui/core": "^3.0.3",
+    "@material-ui/icons": "^3.0.1",
     "classnames": "^2.2.5",
     "immutability-helper": "^2.6.6",
     "lodash": "^4.17.5",
-    "material-ui": "next",
-    "material-ui-icons": "^1.0.0-beta.36",
     "moment": "^2.22.1",
     "normalizr": "^3.2.4",
     "react": "^16.3.1",
@@ -27,18 +27,18 @@
   },
   "devDependencies": {
     "@types/material-ui": "^0.21.1",
-    "@types/moment": "^2.13.0",
     "@types/react": "^16.3.5",
     "@types/react-dom": "*",
     "@types/react-redux": "^5.0.16",
-    "@types/rrule": "^2.2.9",
-    "eslint-plugin-prettier": "^2.6.0",
-    "prettier": "^1.7.4"
+    "eslint-config-prettier": "^3.0.1",
+    "eslint-plugin-prettier": "^2.6.2",
+    "prettier": "^1.14.2"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
-  }
+  },
+  "proxy": "http://localhost:5000"
 }

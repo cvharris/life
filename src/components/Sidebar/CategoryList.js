@@ -1,7 +1,8 @@
+import IconButton from '@material-ui/core/IconButton'
+import List from '@material-ui/core/List'
+import ListSubheader from '@material-ui/core/ListSubheader'
+import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline'
 import React from 'react'
-import List, { ListSubheader } from 'material-ui/List'
-import IconButton from 'material-ui/IconButton'
-import AddCircleOutlineIcon from 'material-ui-icons/AddCircleOutline'
 import CategoryListItem from './CategoryListItem'
 import SidebarContext from './SidebarContext'
 

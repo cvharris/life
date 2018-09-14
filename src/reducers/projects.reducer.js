@@ -1,9 +1,9 @@
 import {
   ADD_PROJECT,
-  UPDATE_PROJECT,
-  DELETE_PROJECT,
   ADD_TASK_TO_PROJECT,
-  REMOVE_TASK_FROM_PROJECT
+  DELETE_PROJECT,
+  REMOVE_TASK_FROM_PROJECT,
+  UPDATE_PROJECT
 } from '../conf/ActionTypes'
 
 export const addProject = project => ({ type: ADD_PROJECT, payload: project })

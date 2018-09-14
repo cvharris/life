@@ -1,20 +1,18 @@
-import React, { Component } from 'react'
+import Checkbox from '@material-ui/core/Checkbox'
+import IconButton from '@material-ui/core/IconButton'
+import ListItem from '@material-ui/core/ListItem'
+import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction'
+import ListItemText from '@material-ui/core/ListItemText'
+import DeleteIcon from '@material-ui/icons/Delete'
+import EditIcon from '@material-ui/icons/Edit'
 import flow from 'lodash/flow'
-import {
-  ListItem,
-  ListItemText,
-  ListItemSecondaryAction
-} from 'material-ui/List'
-import Checkbox from 'material-ui/Checkbox'
-import IconButton from 'material-ui/IconButton'
-import DeleteIcon from 'material-ui-icons/Delete'
-import EditIcon from 'material-ui-icons/Edit'
+import React, { Component } from 'react'
+import { DragSource, DropTarget } from 'react-dnd'
 import { connect } from 'react-redux'
-import { DropTarget, DragSource } from 'react-dnd'
-// import throttle from 'lodash/throttle'
-import { updateTodo, deleteTodo, moveTodos } from '../reducers/tasks.reducer'
-import { toggleFormOpen } from '../reducers/todoForm.reducer'
 import { removeCategoryFromTodo } from '../reducers/categories.reducer'
+// import throttle from 'lodash/throttle'
+import { deleteTodo, moveTodos, updateTodo } from '../reducers/tasks.reducer'
+import { toggleFormOpen } from '../reducers/todoForm.reducer'
 
 const todoListItemSource = {
   beginDrag(props) {

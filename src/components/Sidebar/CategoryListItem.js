@@ -1,18 +1,17 @@
+import Collapse from '@material-ui/core/Collapse'
+import List from '@material-ui/core/List'
+import ListItem from '@material-ui/core/ListItem'
+import ListItemIcon from '@material-ui/core/ListItemIcon'
+import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction'
+import ListItemText from '@material-ui/core/ListItemText'
+import { withStyles } from '@material-ui/core/styles'
+import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline'
+import EditIcon from '@material-ui/icons/Edit'
+import ExpandLessIcon from '@material-ui/icons/ExpandLess'
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import React, { Component } from 'react'
-import { withStyles } from 'material-ui/styles'
-import List, {
-  ListItem,
-  ListItemText,
-  ListItemSecondaryAction,
-  ListItemIcon
-} from 'material-ui/List'
-import Collapse from 'material-ui/transitions/Collapse'
-import EditIcon from 'material-ui-icons/Edit'
-import AddCircleOutlineIcon from 'material-ui-icons/AddCircleOutline'
-import ExpandLessIcon from 'material-ui-icons/ExpandLess'
-import ExpandMoreIcon from 'material-ui-icons/ExpandMore'
-import { compose } from 'redux'
 import { connect } from 'react-redux'
+import { compose } from 'redux'
 import AreaListItem from './AreaListItem'
 import SidebarContext from './SidebarContext'
 
